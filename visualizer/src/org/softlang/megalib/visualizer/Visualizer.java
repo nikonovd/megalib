@@ -10,13 +10,16 @@ import org.softlang.megalib.visualizer.models.Node;
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
+ * @param <N> The type of a node within the graph
+ * @param <E> The type of an edge within the graph
+ * @param <T> The type of the target where the graph shall be written into
  */
-public interface Visualizer {
-    
-    public void transformEdge(Edge edge);
-    
-    public void transformNode(Node node);
-    
-    public void writeTo(OutputStream stream);
-    
+public interface Visualizer<N, E, T> {
+
+    public void transformEdge(E edge);
+
+    public void transformNode(N node);
+
+    public void writeTo(T target);
+
 }
