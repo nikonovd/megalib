@@ -7,3 +7,4 @@ checker/target/
 .recommenders/
 checker/Prelude.megal
 models/checker.jar
+/visualizer/target/
