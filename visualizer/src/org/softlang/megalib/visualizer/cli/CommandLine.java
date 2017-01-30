@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -24,7 +25,7 @@ public class CommandLine {
 
     private static final String TYPE_OPTION_NAME = "t";
 
-    private org.apache.commons.cli.CommandLineParser parser = new DefaultParser();
+    private CommandLineParser parser = new DefaultParser();
 
     private HelpFormatter help = new HelpFormatter();
 
