@@ -16,6 +16,6 @@ public interface Visualizer<N, E, T> {
 
     public void transformNode(N node);
 
-    public void writeTo(T target);
+    public T transform();
 
 }
