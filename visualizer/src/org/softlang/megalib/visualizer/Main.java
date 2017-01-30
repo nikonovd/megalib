@@ -4,6 +4,8 @@
 package org.softlang.megalib.visualizer;
 
 import java.io.PrintWriter;
+import org.java.megalib.checker.services.MegaModelLoader;
+import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.cli.CommandLine;
 import org.softlang.megalib.visualizer.utils.VisualizerType;
 
@@ -21,8 +23,16 @@ public class Main {
             cli.printHelp();
             System.exit(-1);
         }
-
         VisualizerOptions options = VisualizerOptions.of(cli.getRequiredArguments());
+
+        if (!options.getFilePath().toFile().exists()) {
+            System.out.println("Could not find any file at location " + options.getFilePath());
+            System.exit(-1);
+        }
+        MegaModelLoader loader = new MegaModelLoader();
+        loader.loadFile(options.getFilePath().toString());
+        MegaModel model = loader.getModel();
+        System.out.println(model);
     }
 
 }
