@@ -4,6 +4,7 @@
 package org.softlang.megalib.visualizer.cli;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.apache.commons.cli.DefaultParser;
@@ -11,6 +12,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.softlang.megalib.visualizer.cli.exceptions.CommandLineException;
 
 /**
  *
@@ -26,36 +28,40 @@ public class CommandLine {
 
     private HelpFormatter help = new HelpFormatter();
 
-    private PrintWriter writer;
-
     private Options options;
 
     private org.apache.commons.cli.CommandLine cli;
 
     private Collection<String> allowedTypes;
 
-    public CommandLine(PrintWriter writer, Collection<String> allowedTypes) {
-        this.writer = writer;
+    public CommandLine(Collection<String> allowedTypes) {
         this.allowedTypes = allowedTypes;
         this.options = createCommandLineOptions();
     }
 
-    public CommandLine parse(String[] arguments) {
+    public CommandLine parse(String[] arguments) throws CommandLineException {
         try {
             this.cli = this.parser.parse(options, arguments);
         } catch (ParseException ex) {
-            // If this happens, something went horribly wrong anyway
-            throw new RuntimeException(ex);
+            throwHelpException(ex);
         }
         return this;
     }
-
-    public boolean isValid() {
-        return this.cli.hasOption("f") && this.cli.hasOption("t") && this.allowedTypes.contains(this.cli.getOptionValue(TYPE_OPTION_NAME));
+    
+    private void throwHelpException(Exception parent) throws CommandLineException {
+        StringWriter messageWriter = new StringWriter();
+        PrintWriter helpWriter = new PrintWriter(messageWriter);
+        
+        printException(helpWriter, parent);
+        this.help.printUsage(helpWriter, this.help.getWidth(), "visualizer", this.options);
+        helpWriter.flush();
+        
+        throw new CommandLineException(messageWriter.toString());
     }
 
-    public void printHelp() {
-        this.help.printUsage(this.writer, this.help.getWidth(), "visualizer", this.options);
+    private void printException(PrintWriter helpWriter, Exception parent) {
+        helpWriter.print(parent.getMessage());
+        helpWriter.print("\n\n");
     }
 
     public CommandLineArguments getRequiredArguments() {
@@ -64,12 +70,14 @@ public class CommandLine {
 
     private Options createCommandLineOptions() {
         Option file = Option.builder(FILE_OPTION_NAME)
+            .required()
             .hasArg()
             .argName("file path")
             .longOpt("file")
             .desc("The megamodel file that is to be visualized")
             .build();
         Option type = Option.builder(TYPE_OPTION_NAME)
+            .required()
             .hasArg()
             .argName(this.allowedTypes.stream().collect(Collectors.joining("|")))
             .longOpt("type")
