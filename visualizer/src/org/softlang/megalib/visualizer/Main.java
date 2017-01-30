@@ -6,7 +6,6 @@ package org.softlang.megalib.visualizer;
 import org.java.megalib.checker.services.MegaModelLoader;
 import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.cli.CommandLine;
-import org.softlang.megalib.visualizer.cli.exceptions.CommandLineException;
 import org.softlang.megalib.visualizer.utils.VisualizerType;
 
 /**
@@ -16,9 +15,9 @@ import org.softlang.megalib.visualizer.utils.VisualizerType;
 public class Main {
 
     public static void main(String[] args) {
-        CommandLine cli;
+
         try {
-            cli = new CommandLine(VisualizerType.names())
+            CommandLine cli = new CommandLine(VisualizerType.names())
                 .parse(args);
             VisualizerOptions options = VisualizerOptions.of(cli.getRequiredArguments());
 
