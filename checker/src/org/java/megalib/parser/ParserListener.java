@@ -1,9 +1,11 @@
 package org.java.megalib.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -25,30 +27,35 @@ import main.antlr.techdocgrammar.MegalibParser.SubtypeDeclarationContext;
 public class ParserListener extends MegalibBaseListener {
     private MegaModel model;
     private TypeCheck typeCheck;
-    private Set<String[]> substSet;
+    private Map<String,Set<String>> substByGroup;
 
     public ParserListener(MegaModel m) {
         model = m;
         typeCheck = new TypeCheck();
-    }
-
-    @Override
-    public void enterSubstitutionGroup(SubstitutionGroupContext ctx) {
-        substSet = new HashSet<>();
+        substByGroup = new HashMap<>();
     }
 
     @Override
     public void exitSubstitutionGroup(SubstitutionGroupContext ctx) {
-        new Substitution(model).substituteGroup(substSet);
-        substSet = null;
+        model = new Substitution(model, substByGroup).substituteGroup();
+        substByGroup.clear();
+        assert (substByGroup.size() == 0);
     }
 
     @Override
     public void enterSubstitution(SubstitutionContext ctx) {
         String subject = ctx.getChild(0).getText();
         String object = ctx.getChild(2).getText();
-        String[] s = {subject, object};
-        substSet.add(s);
+        if(typeCheck.substitutes(subject, object, model)){
+            Set<String> set;
+            if(substByGroup.containsKey(object)){
+                set = substByGroup.get(object);
+            }else{
+                set = new HashSet<>();
+            }
+            set.add(subject);
+            substByGroup.put(object, set);
+        }
     }
 
     @Override
@@ -58,11 +65,12 @@ public class ParserListener extends MegalibBaseListener {
         if (typeCheck.addSubtypeOf(derivedType, superType, model)) {
             model.addSubtypeOf(derivedType, superType);
         }
+        if(context.getChildCount() > 4){
+            String link = context.getChild(5).getText();
+            if(typeCheck.addLink(derivedType, link.substring(1, link.length() - 1), model)){
+                model.addLink(derivedType, link.substring(1, link.length() - 1));
 
-        String link = context.getChild(5).getText();
-        if (typeCheck.addLink(derivedType, link, model)) {
-            model.addLink(derivedType, link.substring(1, link.length() - 1));
-
+            }
         }
     }
 
@@ -85,7 +93,7 @@ public class ParserListener extends MegalibBaseListener {
                 }
             } else {
                 if (typeCheck.addRelationInstance(relation, instance, object, model)) {
-                    model.addRelationInstances(relation, instance, object);
+                    model.addRelationInstance(relation, instance, object);
                 }
             }
         }
@@ -105,8 +113,8 @@ public class ParserListener extends MegalibBaseListener {
         while(it.next().getText().equals(";")){
             it.next(); // skip =
             String link = it.next().getText();
-            if(typeCheck.addLink(relation, link, model)){
-                model.addLink(relation, link);
+            if(typeCheck.addLink(relation, link.substring(1, link.length() - 1), model)){
+                model.addLink(relation, link.substring(1, link.length() - 1));
             }
         }
     }
@@ -116,13 +124,19 @@ public class ParserListener extends MegalibBaseListener {
         Iterator<ParseTree> it = context.children.iterator();
         String subject = it.next().getText();
         String relation = it.next().getText();
+        if(relation.startsWith("^")){
+            relation = relation.substring(1);
+        }
         String object = it.next().getText();
         if (typeCheck.addRelationInstance(relation, subject, object, model)) {
-            model.addRelationInstances(relation, subject, object);
+            model.addRelationInstance(relation, subject, object);
         }
 
         while(it.next().getText().equals(";")){
             relation = it.next().getText();
+            if(relation.startsWith("^")){
+                relation = relation.substring(1);
+            }
             object = it.next().getText();
             if (relation.equals("=")) {
                 String link = object.substring(1, object.length() - 1);
@@ -131,7 +145,7 @@ public class ParserListener extends MegalibBaseListener {
                 }
             } else {
                 if (typeCheck.addRelationInstance(relation, subject, object, model)) {
-                    model.addRelationInstances(relation, subject, object);
+                    model.addRelationInstance(relation, subject, object);
                 }
             }
         }
@@ -144,19 +158,19 @@ public class ParserListener extends MegalibBaseListener {
         List<String> returnTypes = new ArrayList<>();
 
         boolean parameter = true;
-        for (int childIndex = 2; childIndex < context.getChildCount(); childIndex++) {
-            if (!context.getChild(childIndex).getText().equals("#") && parameter == false
-                    && !context.getChild(childIndex).getText().equals("->")) {
-                returnTypes.add(context.getChild(childIndex).getText());
-            }
-
-            if (!context.getChild(childIndex).getText().equals("#") && parameter == true
+        for(int childIndex = 2; childIndex < context.getChildCount() - 1; childIndex++){
+            if(!context.getChild(childIndex).getText().equals("#") && parameter
                     && !context.getChild(childIndex).getText().equals("->")) {
                 parameterTypes.add(context.getChild(childIndex).getText());
             }
 
             if (context.getChild(childIndex).getText().equals("->")) {
                 parameter = false;
+            }
+
+            if(!context.getChild(childIndex).getText().equals("#") && !parameter
+                    && !context.getChild(childIndex).getText().equals("->")){
+                returnTypes.add(context.getChild(childIndex).getText());
             }
         }
 
@@ -172,15 +186,8 @@ public class ParserListener extends MegalibBaseListener {
         List<String> inputs = new ArrayList<>();
 
         boolean parameter = true;
-        for (int childIndex = 2; childIndex < context.getChildCount(); childIndex++) {
-            if (!context.getChild(childIndex).getText().equals(",") && parameter == false
-                    && !context.getChild(childIndex).getText().equals("|->")
-                    && !context.getChild(childIndex).getText().equals("(")
-                    && !context.getChild(childIndex).getText().equals(")")) {
-                outputs.add(context.getChild(childIndex).getText());
-            }
-
-            if (!context.getChild(childIndex).getText().equals(",") && parameter == true
+        for(int childIndex = 2; childIndex < context.getChildCount() - 1; childIndex++){
+            if(!context.getChild(childIndex).getText().equals(",") && parameter
                     && !context.getChild(childIndex).getText().equals("|->")
                     && !context.getChild(childIndex).getText().equals("(")
                     && !context.getChild(childIndex).getText().equals(")")) {
@@ -189,6 +196,13 @@ public class ParserListener extends MegalibBaseListener {
 
             if (context.getChild(childIndex).getText().equals("|->")) {
                 parameter = false;
+            }
+
+            if(!context.getChild(childIndex).getText().equals(",") && !parameter
+                    && !context.getChild(childIndex).getText().equals("|->")
+                    && !context.getChild(childIndex).getText().equals("(")
+                    && !context.getChild(childIndex).getText().equals(")")){
+                outputs.add(context.getChild(childIndex).getText());
             }
         }
 
@@ -217,7 +231,7 @@ public class ParserListener extends MegalibBaseListener {
                 }
             }else{
                 if(typeCheck.addRelationInstance(relation, subject, object, model)){
-                    model.addRelationInstances(relation, subject, object);
+                    model.addRelationInstance(relation, subject, object);
                 }
             }
         }
