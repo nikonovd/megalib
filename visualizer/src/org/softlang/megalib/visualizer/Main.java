@@ -4,8 +4,6 @@
 package org.softlang.megalib.visualizer;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.java.megalib.checker.services.ModelLoader;
 import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.cli.CommandLine;
@@ -24,7 +22,7 @@ public class Main {
                 .parse(args);
             VisualizerOptions options = VisualizerOptions.of(cli.getRequiredArguments());
 
-            ModelLoader loader = new ModelLoader();
+            ModelLoader loader = new ModelLoader("../models/Prelude.megal");
             loader.loadFile(options.getFilePath().toString());
             MegaModel model = loader.getModel();
             System.out.println(model);
