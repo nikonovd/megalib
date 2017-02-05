@@ -5,6 +5,8 @@ package org.java.megalib.checker;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.java.megalib.checker.services.WellformednessCheck;
 import org.java.megalib.checker.services.ModelLoader;
@@ -18,7 +20,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             if (validArguments(args)) {
-                File f = new File(args[1]);
+                Path filePath = Paths.get(args[1]).toAbsolutePath();
+                File f = filePath.toFile();
                 if (!f.exists()) {
                     System.err.println("The file '" + args[1] + "' does not exist.");
                     return;
@@ -36,9 +39,9 @@ public class Main {
                     }
                 } else {
                     if (args.length > 2 && args[2].equals("-nocon")) {
-                        checkFile(f.getAbsolutePath(), true);
+                        checkFile(f.getCanonicalPath(), true);
                     } else {
-                        checkFile(f.getAbsolutePath(), false);
+                        checkFile(f.getCanonicalPath(), false);
                     }
                 }
 
