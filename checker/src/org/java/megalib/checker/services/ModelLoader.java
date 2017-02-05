@@ -7,6 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,20 +35,28 @@ import main.antlr.techdocgrammar.MegalibLexer;
 import main.antlr.techdocgrammar.MegalibParser;
 
 public class ModelLoader {
+    
+    private static final String PRELUDE_DEFAULT_PATH = "../models/Prelude.megal";
 
     private Queue<String> todos;
     private File root;
 
     private MegaModel model;
     private List<String> typeErrors;
+    
+    private Path preludeStorage;
 
     public ModelLoader() {
+        this(PRELUDE_DEFAULT_PATH);
+    }
+    
+    public ModelLoader(String preludePath) {
         todos = new LinkedList<>();
         model = new MegaModel();
         typeErrors = new ArrayList<>();
+        preludeStorage = Paths.get(preludePath).toAbsolutePath();
         loadPrelude();
     }
-
     public MegaModel getModel() {
         return model;
     }
@@ -59,7 +69,7 @@ public class ModelLoader {
         File f = null;
         String data = "";
         try {
-            f = new File("../models/Prelude.megal");
+            f = preludeStorage.toFile();
             data = FileUtils.readFileToString(f);
             typeErrors = loadString(data);
         }
