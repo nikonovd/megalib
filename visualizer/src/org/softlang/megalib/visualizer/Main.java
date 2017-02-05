@@ -3,7 +3,10 @@
  */
 package org.softlang.megalib.visualizer;
 
-import org.java.megalib.checker.services.MegaModelLoader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.java.megalib.checker.services.ModelLoader;
 import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.cli.CommandLine;
 import org.softlang.megalib.visualizer.utils.VisualizerType;
@@ -21,17 +24,13 @@ public class Main {
                 .parse(args);
             VisualizerOptions options = VisualizerOptions.of(cli.getRequiredArguments());
 
-            if (!options.getFilePath().toFile().exists()) {
-                System.out.println("Could not find any file at location " + options.getFilePath());
-                System.exit(-1);
-            }
-            MegaModelLoader loader = new MegaModelLoader();
+            ModelLoader loader = new ModelLoader();
             loader.loadFile(options.getFilePath().toString());
             MegaModel model = loader.getModel();
             System.out.println(model);
-        } catch (MegaModelVisualizerException ex) {
+        } catch (MegaModelVisualizerException | IOException ex) {
             System.err.println(ex.getMessage());
-            System.exit(-1);
+            System.exit(1);
         }
     }
 
