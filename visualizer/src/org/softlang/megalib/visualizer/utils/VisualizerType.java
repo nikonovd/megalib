@@ -21,5 +21,19 @@ public enum VisualizerType {
             Stream.of(values()).map(type -> type.name().toLowerCase()).collect(Collectors.toList())
         );
     }
+    
+    /**
+     * Get the exporter class that handles the graph creation with this visualizer type.
+     * @return the GraphExporter implementation for the type.
+     */
+    public GraphExporter getExporter() {
+    	switch (this) {
+    	case YED:
+    		return new GraphExporterGML();
+		default:
+			break;
+    	}
+		return new GraphExporterDot();
+    }
 
 }
