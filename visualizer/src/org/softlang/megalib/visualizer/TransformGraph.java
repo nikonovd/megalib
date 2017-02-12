@@ -13,9 +13,10 @@ public class TransformGraph implements VisualizationTransformer<Node, Edge> {
 
 	private GraphExporter exporter;
 	
-	public TransformGraph(VisualizerType type) {
+	public TransformGraph(VisualizerOptions options) {
 		
-		exporter = type.getExporter();
+		exporter = options.getType().getExporter(options.getFilePath());
+		
 	}
 	
 	@Override

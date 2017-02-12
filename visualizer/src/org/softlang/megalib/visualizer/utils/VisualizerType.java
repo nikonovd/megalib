@@ -3,6 +3,7 @@
  */
 package org.softlang.megalib.visualizer.utils;
 
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -24,16 +25,17 @@ public enum VisualizerType {
     
     /**
      * Get the exporter class that handles the graph creation with this visualizer type.
-     * @return the GraphExporter implementation for the type.
+     * @param path The path to which the exported Graph will be written.
+     * @return A GraphExporter instance for the required visualizer type.
      */
-    public GraphExporter getExporter() {
+    public GraphExporter getExporter(Path path) {
     	switch (this) {
     	case YED:
-    		return new GraphExporterGML();
+    		return new GraphExporterGML(path);
 		default:
 			break;
     	}
-		return new GraphExporterDot();
+		return new GraphExporterDot(path);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.softlang.megalib.visualizer.utils;
 
+import java.nio.file.Path;
+
 /**
  * 
  * @author gfial
@@ -7,8 +9,9 @@ package org.softlang.megalib.visualizer.utils;
  */
 public class GraphExporterGML implements GraphExporter{
 
-	public GraphExporterGML() {
-		// TODO Auto-generated constructor stub
+	public GraphExporterGML(Path path) {
+
+		// TODO Create the file at the given path.
 	}
 	
 	@Override
