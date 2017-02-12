@@ -9,6 +9,12 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.softlang.megalib.visualizer.TransformerDOT;
+import org.softlang.megalib.visualizer.TransformerGML;
+import org.softlang.megalib.visualizer.VisualizationTransformer;
+import org.softlang.megalib.visualizer.models.Edge;
+import org.softlang.megalib.visualizer.models.Node;
+
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
@@ -24,18 +30,18 @@ public enum VisualizerType {
     }
     
     /**
-     * Get the exporter class that handles the graph creation with this visualizer type.
-     * @param path The path to which the exported Graph will be written.
+     * Get the transformer class that handles the format creation with this visualizer type.
+     * @param path - the path to which the exported Graph file will be written.
      * @return A GraphExporter instance for the required visualizer type.
      */
-    public GraphExporter getExporter(Path path) {
+    public VisualizationTransformer<Node, Edge> getTransformer(Path path) {
     	switch (this) {
     	case YED:
-    		return new GraphExporterGML(path);
+    		return new TransformerGML(path);
 		default:
 			break;
     	}
-		return new GraphExporterDot(path);
+		return new TransformerDOT(path);
     }
 
 }

@@ -3,11 +3,11 @@
  */
 package org.softlang.megalib.visualizer;
 
+import java.io.File;
 import java.io.IOException;
 import org.java.megalib.checker.services.ModelLoader;
 import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.cli.CommandLine;
-import org.softlang.megalib.visualizer.models.*;
 import org.softlang.megalib.visualizer.utils.VisualizerType;
 
 /**
@@ -26,8 +26,7 @@ public class Main {
             ModelLoader loader = new ModelLoader("../models/Prelude.megal");
             loader.loadFile(options.getFilePath().toString());
             MegaModel model = loader.getModel();
-            Visualizer<Graph> visualizer = new VisualizeGraph(model);
-            VisualizationTransformer<Node, Edge> transformer = new TransformGraph(options);
+            Visualizer<File> visualizer = new FileVisualizer(model, options);
             
         } catch (MegaModelVisualizerException | IOException ex) {
             System.err.println(ex.getMessage());
