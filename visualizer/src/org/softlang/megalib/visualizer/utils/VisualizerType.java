@@ -3,6 +3,8 @@
  */
 package org.softlang.megalib.visualizer.utils;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,8 +35,10 @@ public enum VisualizerType {
      * Get the transformer class that handles the format creation with this visualizer type.
      * @param path - the path to which the exported Graph file will be written.
      * @return A GraphExporter instance for the required visualizer type.
+     * @throws UnsupportedEncodingException 
+     * @throws FileNotFoundException 
      */
-    public VisualizationTransformer<Node, Edge> getTransformer(Path path) {
+    public VisualizationTransformer<Node, Edge> getTransformer(Path path) throws FileNotFoundException, UnsupportedEncodingException {
     	switch (this) {
     	case YED:
     		return new TransformerGML(path);

@@ -1,6 +1,8 @@
 package org.softlang.megalib.visualizer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 import org.java.megalib.models.MegaModel;
 import org.softlang.megalib.visualizer.models.Edge;
@@ -17,7 +19,7 @@ public class FileVisualizer implements Visualizer<File> {
 	private MegaModel model;
 	private VisualizationTransformer<Node, Edge> transformer;
 	
-	public FileVisualizer(MegaModel model, VisualizerOptions options) {
+	public FileVisualizer(MegaModel model, VisualizerOptions options) throws FileNotFoundException, UnsupportedEncodingException {
 		
 		this.model = model;
 		transformer = options.getType().getTransformer(options.getFilePath());
