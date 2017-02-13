@@ -3,10 +3,12 @@
  */
 package org.softlang.megalib.visualizer;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.stream.Collectors;
 import org.java.megalib.checker.services.ModelLoader;
 import org.java.megalib.models.MegaModel;
+import org.java.megalib.parser.ParserException;
 import org.softlang.megalib.visualizer.cli.CommandLine;
 import org.softlang.megalib.visualizer.utils.VisualizerType;
 
@@ -16,7 +18,7 @@ import org.softlang.megalib.visualizer.utils.VisualizerType;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParserException {
 
         try {
             CommandLine cli = new CommandLine(VisualizerType.names())
@@ -24,9 +26,12 @@ public class Main {
             VisualizerOptions options = VisualizerOptions.of(cli.getRequiredArguments());
 
             ModelLoader loader = new ModelLoader("../models/Prelude.megal");
-            loader.loadFile(options.getFilePath().toString());
-            MegaModel model = loader.getModel();
-            Visualizer<File> visualizer = new FileVisualizer(model, options);
+            
+            String data = Files.lines(options.getFilePath()).collect(Collectors.joining("\n"));
+            
+            MegaModel model = loader.parse(data, new ModelParseListener()).getModel();
+            
+            System.out.println(model.getInstanceOfMap());
             
         } catch (MegaModelVisualizerException | IOException ex) {
             System.err.println(ex.getMessage());
