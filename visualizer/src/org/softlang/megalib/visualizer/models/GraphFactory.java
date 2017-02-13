@@ -5,9 +5,9 @@ package org.softlang.megalib.visualizer.models;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.java.megalib.models.Function;
 import org.java.megalib.models.MegaModel;
 import org.java.megalib.models.Relation;
 import org.softlang.megalib.visualizer.MegaModelVisualizerException;
@@ -40,10 +40,20 @@ public class GraphFactory {
     }
 
     private void createNodes(MegaModel model, Graph graph) {
+        createNodesByInstances(model, graph);
+        createNodesByFunctions(model, graph);
+    }
+
+    private void createNodesByInstances(MegaModel model, Graph graph) {
         List<Node> nodes = model.getInstanceOfMap().entrySet().stream()
             .map(entry -> createNode(entry.getKey(), entry.getValue(), model))
             .collect(Collectors.toList());
         nodes.forEach(graph::add);
+    }
+
+    private void createNodesByFunctions(MegaModel model, Graph graph) {
+        model.getFunctionDeclarations().forEach((name, actions) -> graph.add(createNode(name, "FunctionDeclaration", model)));
+        model.getFunctionApplications().forEach((name, actions) -> graph.add(createNode(name, "FunctionApplication", model)));
     }
 
     private Node createNode(String name, String type, MegaModel model) {
@@ -60,10 +70,10 @@ public class GraphFactory {
     }
 
     private void createEdges(MegaModel model, Graph graph) {
-        model.getRelationshipInstanceMap().forEach((name, relations) -> createEdges(graph, name, relations));
+        model.getRelationshipInstanceMap().forEach((name, relations) -> createEdgesByRelations(graph, name, relations));
     }
 
-    private void createEdges(Graph graph, String relationName, Set<Relation> relations) {
+    private void createEdgesByRelations(Graph graph, String relationName, Set<Relation> relations) {
         relations.stream()
             .forEach(relation -> createEdge(graph, relation.getSubject(), relation.getObject(), relationName));
     }

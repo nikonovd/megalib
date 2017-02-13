@@ -89,7 +89,7 @@ public class Node {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\t").append(name).append(" {\n");
+        sb.append("\t").append(name).append(" : ").append(type).append(" {\n");
         
         edges.stream().forEach(e -> sb.append("\t").append(e.toString()).append("\n"));
         

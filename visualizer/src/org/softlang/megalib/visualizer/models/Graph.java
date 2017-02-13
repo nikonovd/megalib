@@ -3,7 +3,8 @@
  */
 package org.softlang.megalib.visualizer.models;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -11,11 +12,11 @@ import java.util.Objects;
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
-public class Graph {
+public class Graph implements Iterable<Node> {
 
     private String name;
 
-    private Map<String, Node> nodes = new HashMap<>();
+    private Map<String, Node> nodes = new LinkedHashMap<>();
 
     Graph(String name) {
         this.name = name;
@@ -85,6 +86,10 @@ public class Graph {
 
         sb.append("}");
         return sb.toString();
+    }
+
+    public Iterator<Node> iterator() {
+        return nodes.values().iterator();
     }
 
 }
