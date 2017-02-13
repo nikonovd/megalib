@@ -13,7 +13,13 @@ import java.util.Objects;
  */
 public class Graph {
 
+    private String name;
+
     private Map<String, Node> nodes = new HashMap<>();
+
+    Graph(String name) {
+        this.name = name;
+    }
 
     /**
      * Adds a node to the graph. If a node with the same name is present, the old one gets overwritten by the new node.
@@ -21,7 +27,7 @@ public class Graph {
      * @param n the node to be added
      * @return the node added to the graph
      */
-    public Node add(Node n) {
+    Node add(Node n) {
         return nodes.put(n.getName(), n);
     }
 
@@ -68,6 +74,17 @@ public class Graph {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("graph ").append(name).append(" {").append("\n");
+
+        nodes.forEach((name, node) -> sb.append(node.toString()).append("\n"));
+
+        sb.append("}");
+        return sb.toString();
     }
 
 }

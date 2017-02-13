@@ -1,7 +1,7 @@
 /*
  *  All rights reserved.
  */
-package org.softlang.megalib.visualizer.cli.exceptions;
+package org.softlang.megalib.visualizer.exceptions;
 
 import org.softlang.megalib.visualizer.MegaModelVisualizerException;
 

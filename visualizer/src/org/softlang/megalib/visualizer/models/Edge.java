@@ -17,7 +17,7 @@ public class Edge {
 
     private String label;
 
-    public Edge(Node origin, Node destination, String label) {
+    Edge(Node origin, Node destination, String label) {
         this.origin = origin;
         this.destination = destination;
         this.label = label;
@@ -66,6 +66,11 @@ public class Edge {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "\t" + (origin == null ? "yet undefined" : origin.getName()) + " " + label + " " + (destination == null ? "yet undefined" : destination.getName());
     }
 
 }

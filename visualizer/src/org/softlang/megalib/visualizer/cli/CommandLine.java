@@ -13,7 +13,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.softlang.megalib.visualizer.cli.exceptions.CommandLineException;
+import org.softlang.megalib.visualizer.exceptions.CommandLineException;
 
 /**
  *

@@ -13,13 +13,16 @@ import java.util.Set;
  */
 public class Node {
 
+    private String type;
+
     private String name;
 
     private String link;
 
     private Set<Edge> edges = new HashSet<>();
 
-    public Node(String name, String link) {
+    Node(String type, String name, String link) {
+        this.type = type;
         this.name = name;
         this.link = link;
     }
@@ -81,6 +84,18 @@ public class Node {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\t").append(name).append(" {\n");
+        
+        edges.stream().forEach(e -> sb.append("\t").append(e.toString()).append("\n"));
+        
+        sb.append("\t").append("}");
+        
+        return sb.toString();
     }
 
 }
