@@ -26,6 +26,10 @@ public class TypeCheck {
         errors = new ArrayList<>();
     }
 
+    public void addError(String e) {
+        errors.add(e);
+    }
+
     public List<String> getErrors() {
         return Collections.unmodifiableList(errors);
     }
@@ -90,13 +94,13 @@ public class TypeCheck {
         if (!m.getInstanceOfMap().containsKey(object)) {
             errors.add("Error at instance of " + name + ": " + object + " is not instantiated.");
         }
-        Relation i = null;
         if(name.startsWith("^")){
             name = name.substring(1);
-            i = new Relation(object, subject);
-        }else{
-            i = new Relation(subject, object);
+            String temp = subject;
+            subject = object;
+            object = temp;
         }
+        Relation i = new Relation(subject, object);
         if (m.getRelationshipInstanceMap().containsKey(name)) {
             if (m.getRelationshipInstanceMap().get(name).contains(i)) {
                 errors.add("Error at instance of " + name + ": '" + subject + " " + name + " " + object
@@ -262,23 +266,6 @@ public class TypeCheck {
         }
         if (links.contains(link)) {
             errors.add("Error at linking " + entity + " to " + link + ". This link has already been assigned");
-        }
-        return errors.isEmpty();
-    }
-
-    public boolean substitutes(String by, String e, MegaModel m) {
-        if(!errors.isEmpty())
-            return false;
-        if (!m.getInstanceOfMap().containsKey(e)) {
-            errors.add("Unable to substitute : " + e + " does not exist.");
-        }
-        if (m.getInstanceOfMap().containsKey(by)) {
-            errors.add("Unable to substitute " + e + " by " + by + ". " + by + " already exists");
-        }
-        if (!m.isInstanceOf(e, "Language") && !m.isInstanceOf(e, "Artifact") && !m.isInstanceOf(e, "System")
-                && !m.isInstanceOf(e, "Technology")) {
-            errors.add("Unable to substitute " + e + " by " + by
-                       + ". Only instances of Language, Artifact, System and Technology can be substituted.");
         }
         return errors.isEmpty();
     }
