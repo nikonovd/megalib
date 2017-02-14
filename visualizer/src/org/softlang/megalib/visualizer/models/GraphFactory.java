@@ -52,8 +52,8 @@ public class GraphFactory {
     }
 
     private void createNodesByFunctions(MegaModel model, Graph graph) {
-        model.getFunctionDeclarations().forEach((name, actions) -> graph.add(createNode("#" + name, "FunctionDeclaration", model)));
-        model.getFunctionApplications().forEach((name, actions) -> graph.add(createNode(name, "FunctionApplication", model)));
+        model.getFunctionDeclarations().forEach((name, actions) -> graph.add(createNode(name, "FunctionDeclaration", model)));
+        model.getFunctionApplications().forEach((name, actions) -> graph.add(createNode(("#" + name), "FunctionApplication", model)));
     }
 
     private Node createNode(String name, String type, MegaModel model) {
@@ -72,17 +72,17 @@ public class GraphFactory {
     private void createEdges(MegaModel model, Graph graph) {
         model.getRelationshipInstanceMap().forEach((name, relations) -> createEdgesByRelations(graph, name, relations));
         model.getFunctionDeclarations().forEach((name, functions) -> createEdgesByFunctionDeclarations(graph, name, functions));
-        model.getFunctionDeclarations().forEach((name, functions) -> createEdgesByFunctionApplications(graph, name, functions));
+        model.getFunctionApplications().forEach((name, functions) -> createEdgesByFunctionApplications(graph, name, functions));
     }
 
     private void createEdgesByFunctionDeclarations(Graph graph, String functionName, Set<Function> funcs) {
-        funcs.forEach(f -> createEdgesByFunction(graph, ("#" + functionName), f));
+        funcs.forEach(f -> createEdgesByFunction(graph, functionName, f));
     }
 
     private void createEdgesByFunctionApplications(Graph graph, String functionName, Set<Function> funcs) {
         funcs.forEach(f -> {
-            createEdgesByFunction(graph, functionName, f);
-            createEdge(graph, functionName, ("#" + functionName), "applicationOf");
+            createEdgesByFunction(graph, ("#" + functionName), f);
+            createEdge(graph, ("#" + functionName), functionName, "applicationOf");
         });
     }
 
