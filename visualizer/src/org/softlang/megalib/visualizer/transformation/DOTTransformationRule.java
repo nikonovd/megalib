@@ -11,7 +11,7 @@ class DOTTransformationRule implements VisualizationRule<Node, Edge> {
 
     @Override
     public String transformNode(Node node) {
-        return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"];";
+        return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) +"];";
     }
 
     @Override
