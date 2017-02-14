@@ -11,7 +11,7 @@ class DOTTransformationRule implements VisualizationRule<Node, Edge> {
 
     @Override
     public String transformNode(Node node) {
-        return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"]";
+        return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"];";
     }
 
     @Override
@@ -19,7 +19,7 @@ class DOTTransformationRule implements VisualizationRule<Node, Edge> {
         return "\"" + edge.getOrigin().getName()
             + "\"" + " -> " + "\""
             + (edge.getDestination() == null ? "yet_undefined" : edge.getDestination().getName())
-            + "\"" + " [label=\"" + edge.getLabel() + "\"]";
+            + "\"" + " [label=\"" + edge.getLabel() + "\"];";
     }
 
 }

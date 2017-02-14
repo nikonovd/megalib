@@ -33,6 +33,8 @@ public class DOTTransformer extends Transformer<String> {
         sb.append("digraph ")
             .append(options.getModelName())
             .append(" {")
+            .append("\n")
+            .append("\trankdir = LR;")
             .append("\n");
 
         g.forEachNode(n -> appendNode(sb, n));
