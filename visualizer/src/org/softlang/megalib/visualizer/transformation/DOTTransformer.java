@@ -7,7 +7,7 @@ import org.softlang.megalib.visualizer.models.*;
  * @author gfial
  *
  */
-public class DOTTransformer implements VisualizationTransformer<Node, String, Edge, String> {
+public class DOTTransformer implements VisualizationTransformer<Node, Edge> {
 
     @Override
     public String transformNode(Node node) {
