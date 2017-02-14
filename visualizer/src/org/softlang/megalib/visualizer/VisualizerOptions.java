@@ -29,6 +29,10 @@ public class VisualizerOptions {
         this.type = type;
     }
 
+    public String getModelName() {
+        return filePath.getFileName().toString().replaceAll("\\.megal", "");
+    }
+
     public Path getFilePath() {
         return filePath;
     }

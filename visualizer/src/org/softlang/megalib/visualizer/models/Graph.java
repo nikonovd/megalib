@@ -3,16 +3,18 @@
  */
 package org.softlang.megalib.visualizer.models;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
-public class Graph implements Iterable<Node> {
+public class Graph {
 
     private String name;
 
@@ -52,6 +54,14 @@ public class Graph implements Iterable<Node> {
         return nodes.containsKey(name);
     }
 
+    public void forEachNode(Consumer<? super Node> consumer) {
+        nodes.values().forEach(consumer);
+    }
+
+    public void forEachEdge(Consumer<? super Edge> consumer) {
+        nodes.values().forEach(n -> n.forEachEdge(consumer));
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -86,10 +96,6 @@ public class Graph implements Iterable<Node> {
 
         sb.append("}");
         return sb.toString();
-    }
-
-    public Iterator<Node> iterator() {
-        return nodes.values().iterator();
     }
 
 }

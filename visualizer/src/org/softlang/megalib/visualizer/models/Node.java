@@ -6,6 +6,7 @@ package org.softlang.megalib.visualizer.models;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  *
@@ -25,6 +26,10 @@ public class Node {
         this.type = type;
         this.name = name;
         this.link = link;
+    }
+    
+    public void forEachEdge(Consumer<? super Edge> consumer) {
+        edges.forEach(consumer);
     }
 
     /**

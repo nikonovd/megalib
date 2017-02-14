@@ -24,7 +24,10 @@ public class Main {
 
             Graph graph = new GraphFactory(options).create();
             
-            System.out.println(graph);
+            FileVisualizer visualizer = new FileVisualizer(options);
+            visualizer.create(graph);
+            
+            System.out.println("Visualization complete.");
 
         } catch (MegaModelVisualizerException ex) {
             System.err.println(ex.getMessage());

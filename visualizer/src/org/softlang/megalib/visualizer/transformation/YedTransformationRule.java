@@ -9,7 +9,7 @@ import org.softlang.megalib.visualizer.models.*;
  * @author gfial
  *
  */
-public class YedTransformer implements VisualizationTransformer<Node, Edge> {
+class YedTransformationRule implements VisualizationRule<Node, Edge> {
 
     @Override
     public String transformNode(Node node) {

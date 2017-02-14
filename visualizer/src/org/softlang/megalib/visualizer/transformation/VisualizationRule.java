@@ -10,7 +10,7 @@ package org.softlang.megalib.visualizer.transformation;
  * @param <N> The type of a node within the graph
  * @param <E> The type of an edge within the graph
  */
-public interface VisualizationTransformer<N, E> {
+public interface VisualizationRule<N, E> {
 
     public String transformNode(N node);
 

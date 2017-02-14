@@ -7,7 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import org.softlang.megalib.visualizer.transformation.DOTTransformer;
+import org.softlang.megalib.visualizer.transformation.Transformer;
 
 /**
  *
@@ -15,11 +16,33 @@ import java.util.stream.Stream;
  */
 public enum VisualizerType {
 
-    GRAPHVIZ, YED;
+    GRAPHVIZ {
+        @Override
+        public String getFileExtension() {
+            return "dot";
+        }
+    }, YED {
+        @Override
+        public String getFileExtension() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    };
 
     public static Collection<String> names() {
         return Collections.unmodifiableList(
             Stream.of(values()).map(type -> type.name().toLowerCase()).collect(Collectors.toList())
         );
+    }
+
+    public abstract String getFileExtension();
+
+    public Class<? extends Transformer<?>> getTransformerClass() {
+        switch (this) {
+            case GRAPHVIZ:
+                return DOTTransformer.class;
+            case YED:
+                throw new IllegalArgumentException();
+        }
+        throw new IllegalArgumentException();
     }
 }

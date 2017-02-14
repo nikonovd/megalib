@@ -3,6 +3,8 @@
  */
 package org.softlang.megalib.visualizer;
 
+import org.softlang.megalib.visualizer.models.Graph;
+
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
@@ -10,6 +12,6 @@ package org.softlang.megalib.visualizer;
  */
 public interface Visualizer<T> {
 
-    public T create();
+    public T create(Graph graph);
 
 }
