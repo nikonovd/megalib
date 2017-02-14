@@ -32,7 +32,7 @@ public class GraphFactory {
     public Graph create() throws MegaModelVisualizerException {
         MegaModel model = reader.read();
 
-        Graph graph = new Graph(options.getFilePath().getFileName().toString().replaceAll("\\.megal", ""));
+        Graph graph = new Graph(options.getModelName());
         createNodes(model, graph);
         createEdges(model, graph);
 
@@ -88,7 +88,7 @@ public class GraphFactory {
 
     private void createEdgesByFunction(Graph graph, String functionName, Function f) {
         f.getInputs().forEach(input -> createEdge(graph, functionName, input, "functionInput"));
-        f.getInputs().forEach(input -> createEdge(graph, functionName, input, "functionOutput"));
+        f.getOutputs().forEach(output -> createEdge(graph, functionName, output, "functionOutput"));
     }
 
     private void createEdgesByRelations(Graph graph, String relationName, Set<Relation> relations) {

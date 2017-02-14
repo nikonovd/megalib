@@ -9,3 +9,8 @@ visualizer/target
 checker/Prelude.megal
 models/checker.jar
 /visualizer/target/
+*.dot
+*.xml
+*.megal
+*.png
+*.svg
