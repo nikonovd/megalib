@@ -3,7 +3,7 @@
  */
 package org.softlang.megalib.visualizer.models;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,7 +19,7 @@ public class Node {
 
     private String link;
 
-    private Set<Edge> edges = new HashSet<>();
+    private Set<Edge> edges = new LinkedHashSet<>();
 
     Node(String type, String name, String link) {
         this.type = type;
@@ -84,6 +84,10 @@ public class Node {
             return false;
         }
         return true;
+    }
+    
+    public boolean isInstanceOf(String type) {
+        return this.type.equals(type);
     }
 
     @Override

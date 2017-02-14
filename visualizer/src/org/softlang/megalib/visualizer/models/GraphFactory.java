@@ -52,7 +52,7 @@ public class GraphFactory {
     }
 
     private void createNodesByFunctions(MegaModel model, Graph graph) {
-        model.getFunctionDeclarations().forEach((name, actions) -> graph.add(createNode(name, "FunctionDeclaration", model)));
+        model.getFunctionDeclarations().forEach((name, actions) -> graph.add(createNode("#" + name, "FunctionDeclaration", model)));
         model.getFunctionApplications().forEach((name, actions) -> graph.add(createNode(name, "FunctionApplication", model)));
     }
 
@@ -71,6 +71,24 @@ public class GraphFactory {
 
     private void createEdges(MegaModel model, Graph graph) {
         model.getRelationshipInstanceMap().forEach((name, relations) -> createEdgesByRelations(graph, name, relations));
+        model.getFunctionDeclarations().forEach((name, functions) -> createEdgesByFunctionDeclarations(graph, name, functions));
+        model.getFunctionDeclarations().forEach((name, functions) -> createEdgesByFunctionApplications(graph, name, functions));
+    }
+
+    private void createEdgesByFunctionDeclarations(Graph graph, String functionName, Set<Function> funcs) {
+        funcs.forEach(f -> createEdgesByFunction(graph, ("#" + functionName), f));
+    }
+
+    private void createEdgesByFunctionApplications(Graph graph, String functionName, Set<Function> funcs) {
+        funcs.forEach(f -> {
+            createEdgesByFunction(graph, functionName, f);
+            createEdge(graph, functionName, ("#" + functionName), "applicationOf");
+        });
+    }
+
+    private void createEdgesByFunction(Graph graph, String functionName, Function f) {
+        f.getInputs().forEach(input -> createEdge(graph, functionName, input, "functionInput"));
+        f.getInputs().forEach(input -> createEdge(graph, functionName, input, "functionOutput"));
     }
 
     private void createEdgesByRelations(Graph graph, String relationName, Set<Relation> relations) {
