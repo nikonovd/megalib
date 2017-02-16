@@ -23,6 +23,8 @@ public class ModelReader {
 
     private ModelLoader loader = new ModelLoader("../models/Prelude.megal");
 
+    private ModelParseListener listener;
+
     public ModelReader(VisualizerOptions options) {
         this.options = options;
     }
@@ -31,9 +33,26 @@ public class ModelReader {
         return parse(readFile());
     }
 
+    public MegaModel readFull() throws ModelReaderException {
+        try {
+            loader.loadFile(options.getFilePath().toString());
+            
+            return loader.getModel();
+        } catch (IOException ex) {
+            throw new ModelReaderException(ex);
+        }
+    }
+
+    public String getModuleName() {
+        return listener.getModuleName();
+    }
+
     private MegaModel parse(String data) throws ModelReaderException {
         try {
-            return loader.parse(data, new ModelParseListener()).getModel();
+            listener = new ModelParseListener();
+            loader.parse(data, listener);
+
+            return listener.getModel();
         } catch (ParserException | IOException ex) {
             throw new ModelReaderException(ex);
         }

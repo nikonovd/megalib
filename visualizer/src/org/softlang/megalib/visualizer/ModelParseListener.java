@@ -25,12 +25,22 @@ public class ModelParseListener extends MegalibBaseListener {
 
     private Map<String, Set<String>> substByGroup;
 
+    private String moduleName;
+
     public ModelParseListener() {
         model = new MegaModel();
     }
 
     public ModelParseListener(MegaModel m) {
         model = m;
+    }
+
+    @Override
+    public void enterModule(MegalibParser.ModuleContext ctx) {
+        if (ctx.children == null || ctx.children.size() < 2) {
+            return;
+        }
+        moduleName = ctx.children.get(1).getText();
     }
 
     @Override
@@ -204,6 +214,10 @@ public class ModelParseListener extends MegalibBaseListener {
 
     public MegaModel getModel() {
         return model;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 
 }

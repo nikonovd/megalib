@@ -20,6 +20,8 @@ public class Graph {
 
     private Map<String, Node> nodes = new LinkedHashMap<>();
 
+    private Set<Graph> subgraphs = new LinkedHashSet<>();
+
     Graph(String name) {
         this.name = name;
     }
@@ -60,6 +62,10 @@ public class Graph {
 
     public void forEachEdge(Consumer<? super Edge> consumer) {
         nodes.values().forEach(n -> n.forEachEdge(consumer));
+    }
+
+    public void forEachSubgraph(Consumer<? super Graph> consumer) {
+        subgraphs.forEach(consumer);
     }
 
     @Override
