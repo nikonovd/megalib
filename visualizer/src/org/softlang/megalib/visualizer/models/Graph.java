@@ -4,10 +4,8 @@
 package org.softlang.megalib.visualizer.models;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -19,8 +17,6 @@ public class Graph {
     private String name;
 
     private Map<String, Node> nodes = new LinkedHashMap<>();
-
-    private Set<Graph> subgraphs = new LinkedHashSet<>();
 
     Graph(String name) {
         this.name = name;
@@ -62,10 +58,6 @@ public class Graph {
 
     public void forEachEdge(Consumer<? super Edge> consumer) {
         nodes.values().forEach(n -> n.forEachEdge(consumer));
-    }
-
-    public void forEachSubgraph(Consumer<? super Graph> consumer) {
-        subgraphs.forEach(consumer);
     }
 
     @Override
