@@ -85,15 +85,4 @@ public class Graph {
         return true;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("graph ").append(name).append(" {").append("\n");
-
-        nodes.forEach((name, node) -> sb.append(node.toString()).append("\n"));
-
-        sb.append("}");
-        return sb.toString();
-    }
-
 }

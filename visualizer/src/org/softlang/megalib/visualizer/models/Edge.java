@@ -68,8 +68,4 @@ public class Edge {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "\t" + (origin == null ? "yet undefined" : origin.getName()) + " " + label + " " + (destination == null ? "yet undefined" : destination.getName());
-    }
 }

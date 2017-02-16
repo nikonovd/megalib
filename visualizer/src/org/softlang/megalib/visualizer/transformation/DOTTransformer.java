@@ -25,6 +25,10 @@ public class DOTTransformer extends Transformer<String> {
         if (g == null) {
             throw new IllegalArgumentException();
         }
+        ManifestationDetacher detacher = new ManifestationDetacher();
+        
+        g.forEachNode(n -> detacher.processNode(n));
+        
         return process(g).toString();
     }
 

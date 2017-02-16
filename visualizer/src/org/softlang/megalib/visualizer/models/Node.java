@@ -3,9 +3,9 @@
  */
 package org.softlang.megalib.visualizer.models;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -20,16 +20,20 @@ public class Node {
 
     private String link;
 
-    private Set<Edge> edges = new LinkedHashSet<>();
+    private Map<String, Edge> edges = new LinkedHashMap<>();
 
     Node(String type, String name, String link) {
         this.type = type;
         this.name = name;
         this.link = link;
     }
-    
+
     public void forEachEdge(Consumer<? super Edge> consumer) {
-        edges.forEach(consumer);
+        edges.values().forEach(consumer);
+    }
+
+    public Edge getEdge(String relation) {
+        return edges.get(relation);
     }
 
     /**
@@ -40,8 +44,20 @@ public class Node {
      * @return the current node
      */
     public Node connect(String relation, Node destination) {
-        this.edges.add(new Edge(this, destination, relation));
+        this.edges.put(relation, new Edge(this, destination, relation));
         return this;
+    }
+
+    public boolean disconnect(String relation) {
+        Edge toRemove = this.edges.values().stream().filter(edge -> edge.getLabel().equals(relation)).findFirst().orElse(null);
+        if (toRemove == null) {
+            return false;
+        }
+        return edges.remove(relation, toRemove);
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**
@@ -60,6 +76,10 @@ public class Node {
      */
     public String getLink() {
         return link;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -90,21 +110,9 @@ public class Node {
         }
         return true;
     }
-    
+
     public boolean isInstanceOf(String type) {
         return this.type.equals(type);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\t").append(name).append(" : ").append(type).append(" {\n");
-        
-        edges.stream().forEach(e -> sb.append("\t").append(e.toString()).append("\n"));
-        
-        sb.append("\t").append("}");
-        
-        return sb.toString();
     }
 
 }

@@ -28,7 +28,6 @@ public class Main {
             visualizer.create(graph);
             
             System.out.println("Visualization complete.");
-
         } catch (MegaModelVisualizerException ex) {
             System.err.println(ex.getMessage());
             System.exit(1);
