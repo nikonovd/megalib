@@ -1,6 +1,8 @@
 package org.softlang.megalib.visualizer.transformation;
 
 import org.softlang.megalib.visualizer.models.*;
+import org.softlang.megalib.visualizer.models.configuration.GraphConfiguration;
+import org.softlang.megalib.visualizer.models.configuration.NodeConfiguration;
 
 /**
  *
@@ -9,9 +11,19 @@ import org.softlang.megalib.visualizer.models.*;
  */
 class DOTTransformationRule implements VisualizationRule<Node, Edge> {
 
+    private GraphConfiguration config;
+
+    public DOTTransformationRule(GraphConfiguration config) {
+        this.config = config;
+    }
+
     @Override
     public String transformNode(Node node) {
-        return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) +"];";
+        NodeConfiguration nodeConfig = config.getNodeConfiguration(node.getType());
+        if (nodeConfig == null) {
+            return "\"" + node.getName() + "\"" + " [label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) + "];";
+        }
+        return "\"" + node.getName() + "\"" + " [shape=\"" + nodeConfig.getShape() + "\" color=\"" + nodeConfig.getColor() + "\" label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) + "];";
     }
 
     @Override

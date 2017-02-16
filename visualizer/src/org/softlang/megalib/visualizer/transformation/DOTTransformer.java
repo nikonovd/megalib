@@ -7,6 +7,7 @@ import org.softlang.megalib.visualizer.VisualizerOptions;
 import org.softlang.megalib.visualizer.models.Edge;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.models.Node;
+import org.softlang.megalib.visualizer.models.configuration.GraphConfigurations;
 
 /**
  *
@@ -14,7 +15,7 @@ import org.softlang.megalib.visualizer.models.Node;
  */
 public class DOTTransformer extends Transformer<String> {
 
-    private DOTTransformationRule rule = new DOTTransformationRule();
+    private DOTTransformationRule rule = new DOTTransformationRule(GraphConfigurations.defaultDotConfiguration());
 
     public DOTTransformer(VisualizerOptions options) {
         super(options);
