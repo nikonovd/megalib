@@ -3,6 +3,7 @@
  */
 package org.softlang.megalib.visualizer.models;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
-public class Graph {
+public class Graph implements Iterable<Node> {
 
     private String name;
 
@@ -40,6 +41,10 @@ public class Graph {
      */
     public Node get(String name) {
         return nodes.get(name);
+    }
+
+    public void remove(Node node) {
+        nodes.remove(node.getName());
     }
 
     /**
@@ -83,6 +88,11 @@ public class Graph {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Iterator<Node> iterator() {
+        return nodes.values().iterator();
     }
 
 }

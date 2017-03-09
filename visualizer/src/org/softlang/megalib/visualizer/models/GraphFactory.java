@@ -68,15 +68,15 @@ public class GraphFactory {
 
     private Node createNode(String name, String type, MegaModel model) {
         Node result = new Node(type, name, getFirstInstanceLink(model, name));
-        
+
         applyInstanceHierarchy(result);
-        
+
         return result;
     }
-    
+
     private void applyInstanceHierarchy(Node node) {
         String type = node.getType();
-        while(type != null && !type.isEmpty()) {
+        while (type != null && !type.isEmpty()) {
             node.getInstanceHierarchy().add(type);
             type = resolveableModel.getSubtypesMap().get(type);
         }
@@ -123,19 +123,21 @@ public class GraphFactory {
         Node toNode = graph.get(to);
 
         if (toNode == null) {
-            toNode = lazyCreateImportedNode(to);
+            toNode = lazyCreateImportedNode(graph, to);
         }
 
         fromNode.connect(relation, toNode);
     }
 
-    private Node lazyCreateImportedNode(String name) {
+    private Node lazyCreateImportedNode(Graph graph, String name) {
         if (!resolveableModel.getInstanceOfMap().containsKey(name)) {
             throw new IllegalArgumentException("Could not resolve node " + name);
         }
         String type = resolveableModel.getInstanceOfMap().get(name);
-
-        return createNode(name, type, resolveableModel);
+        Node result = createNode(name, type, resolveableModel);
+        graph.add(result);
+        
+        return result;
     }
 
 }

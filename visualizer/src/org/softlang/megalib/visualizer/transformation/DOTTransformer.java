@@ -27,8 +27,8 @@ public class DOTTransformer extends Transformer<String> {
         }
         ManifestationDetacher detacher = new ManifestationDetacher();
 
-        g.forEachNode(n -> detacher.processNode(n));
-
+        detacher.processGraph(g);
+        
         return process(g).toString();
     }
 

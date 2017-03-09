@@ -3,7 +3,7 @@
  */
 package org.softlang.megalib.visualizer.transformation;
 
-import org.softlang.megalib.visualizer.models.Node;
+import org.softlang.megalib.visualizer.models.Graph;
 
 /**
  *
@@ -11,6 +11,6 @@ import org.softlang.megalib.visualizer.models.Node;
  */
 public interface GraphProcessor {
 
-    public Node processNode(Node node);
+    public void processGraph(Graph g);
 
 }

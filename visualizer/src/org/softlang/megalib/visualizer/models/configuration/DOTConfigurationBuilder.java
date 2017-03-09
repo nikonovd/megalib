@@ -20,6 +20,7 @@ public class DOTConfigurationBuilder implements ConfigurationBuilder {
     @Override
     public TransformerConfiguration buildConfiguration() {
         Properties props = loadFromFile().orElseGet(this::loadFromClassPath);
+        System.out.println(propertiesToConfiguration(props));
         return propertiesToConfiguration(props);
     }
 

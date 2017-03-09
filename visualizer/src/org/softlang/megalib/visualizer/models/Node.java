@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -52,12 +53,14 @@ public class Node {
         return this;
     }
 
-    public boolean disconnect(String relation) {
+    public Optional<Node> disconnect(String relation) {
         Edge toRemove = this.edges.values().stream().filter(edge -> edge.getLabel().equals(relation)).findFirst().orElse(null);
         if (toRemove == null) {
-            return false;
+            return Optional.empty();
         }
-        return edges.remove(relation, toRemove);
+        edges.remove(relation, toRemove);
+        
+        return Optional.of(toRemove.getDestination());
     }
 
     public void setType(String type) {
