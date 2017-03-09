@@ -4,6 +4,8 @@
 package org.softlang.megalib.visualizer.models;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -19,6 +21,8 @@ public class Node {
     private String name;
 
     private String link;
+    
+    private LinkedList<String> instanceHierarchy = new LinkedList<>();
 
     private Map<String, Edge> edges = new LinkedHashMap<>();
 
@@ -82,6 +86,10 @@ public class Node {
         return type;
     }
 
+    public LinkedList<String> getInstanceHierarchy() {
+        return instanceHierarchy;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;

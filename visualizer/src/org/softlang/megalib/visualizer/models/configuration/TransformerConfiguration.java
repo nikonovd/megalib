@@ -18,7 +18,7 @@ public class TransformerConfiguration {
     }
 
     public TransformerConfiguration put(String key, String subKey, String value) {
-        ConfigItem<String, String> item = config.get(key).orElseGet(() -> createConfigItem(key));
+        ConfigItem<String, String> item = config.contains(key) ? config.get(key) : createConfigItem(key);
 
         item.put(subKey, value);
 
@@ -32,7 +32,7 @@ public class TransformerConfiguration {
         return result;
     }
 
-    public Optional<ConfigItem<String, String>> get(String key) {
+    public ConfigItem<String, String> get(String key) {
         return config.get(key);
     }
 

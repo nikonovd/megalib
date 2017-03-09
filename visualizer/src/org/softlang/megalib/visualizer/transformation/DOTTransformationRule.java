@@ -1,6 +1,9 @@
 package org.softlang.megalib.visualizer.transformation;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.softlang.megalib.visualizer.models.*;
 import org.softlang.megalib.visualizer.models.configuration.ConfigItem;
 import org.softlang.megalib.visualizer.models.configuration.DOTConfigurationBuilder;
@@ -21,13 +24,11 @@ class DOTTransformationRule implements VisualizationRule<Node, Edge> {
 
     @Override
     public String transformNode(Node node) {
-        ConfigItem<String, String> config = getConfigItem(node);
-
-        return "\"" + node.getName() + "\"" + " [shape=\"" + getConfigValue(config, "shape") + "\" color=\"" + getConfigValue(config, "color") + "\" label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) + "];";
+        return "\"" + node.getName() + "\"" + " [shape=\"" + getConfigValue(node, "shape") + "\" color=\"" + getConfigValue(node, "color") + "\" label=\"" + node.getName() + "\"" + (node.getLink().isEmpty() ? "" : (" URL=\"" + node.getLink() + "\"")) + "];";
     }
 
-    private String getConfigValue(ConfigItem<String, String> config, String key) {
-        return config.get(key).map(Optional::of).orElse(DEFAULT_CONFIG.get(key)).get();
+    private String getConfigValue(Node node, String attribute) {
+        return getConfigItem(node, attribute).get(attribute);
     }
 
     @Override
@@ -38,23 +39,20 @@ class DOTTransformationRule implements VisualizationRule<Node, Edge> {
             + "\"" + " [label=\"" + edge.getLabel() + "\"];";
     }
 
-    private ConfigItem<String, String> getConfigItem(Node node) {
-        Optional<String> key = getApplyingKey(node);
-        if (!key.isPresent()) {
-            return DEFAULT_CONFIG;
+    private ConfigItem<String, String> getConfigItem(Node node, String attribute) {
+        for(String key : getKeyHierarchy(node)) {
+            if(config.contains(key) && config.get(key).contains(attribute)) {
+                return config.get(key);
+            }
         }
-        return key.flatMap(config::get).get();
+        return DEFAULT_CONFIG;
     }
 
-    private Optional<String> getApplyingKey(Node node) {
-        if (config.contains(node.getName())) {
-            return Optional.of(node.getName());
-        }
-        if (config.contains(node.getType())) {
-            return Optional.of(node.getType());
-        }
-        // todo: upper type hierarchy
-        return Optional.empty();
+    private List<String> getKeyHierarchy(Node node) {
+        return Stream.concat(
+            Stream.of(node.getName(), node.getType()), 
+            node.getInstanceHierarchy().stream()
+        ).collect(Collectors.toList());
     }
 
 }

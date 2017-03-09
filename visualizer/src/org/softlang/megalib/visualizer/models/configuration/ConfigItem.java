@@ -26,8 +26,8 @@ public class ConfigItem<K, V> {
         return this;
     }
 
-    public Optional<V> get(K key) {
-        return Optional.ofNullable(backend.get(key));
+    public V get(K key) {
+        return backend.get(key);
     }
 
     @Override

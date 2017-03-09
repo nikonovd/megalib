@@ -5,8 +5,6 @@ package org.softlang.megalib.visualizer;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.java.megalib.checker.services.ModelLoader;
 import org.java.megalib.models.MegaModel;
