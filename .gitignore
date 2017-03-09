@@ -14,3 +14,4 @@ models/checker.jar
 *.megal
 *.png
 *.svg
+/visualizer/nbproject/

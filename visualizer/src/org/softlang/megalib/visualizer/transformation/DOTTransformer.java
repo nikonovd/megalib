@@ -7,7 +7,6 @@ import org.softlang.megalib.visualizer.VisualizerOptions;
 import org.softlang.megalib.visualizer.models.Edge;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.models.Node;
-import org.softlang.megalib.visualizer.models.configuration.GraphConfigurations;
 
 /**
  *
@@ -15,7 +14,7 @@ import org.softlang.megalib.visualizer.models.configuration.GraphConfigurations;
  */
 public class DOTTransformer extends Transformer<String> {
 
-    private DOTTransformationRule rule = new DOTTransformationRule(GraphConfigurations.defaultDotConfiguration());
+    private DOTTransformationRule rule = new DOTTransformationRule();
 
     public DOTTransformer(VisualizerOptions options) {
         super(options);
@@ -27,9 +26,9 @@ public class DOTTransformer extends Transformer<String> {
             throw new IllegalArgumentException();
         }
         ManifestationDetacher detacher = new ManifestationDetacher();
-        
+
         g.forEachNode(n -> detacher.processNode(n));
-        
+
         return process(g).toString();
     }
 
@@ -43,9 +42,9 @@ public class DOTTransformer extends Transformer<String> {
             .append("\n");
 
         g.forEachNode(n -> appendNode(sb, n));
-        
+
         sb.append("\n\n");
-        
+
         g.forEachEdge(e -> appendEdge(sb, e));
 
         sb.append("}");
