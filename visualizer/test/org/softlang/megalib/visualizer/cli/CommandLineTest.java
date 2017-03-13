@@ -3,11 +3,9 @@
  */
 package org.softlang.megalib.visualizer.cli;
 
-import main.org.softlang.megalib.visualizer.cli.CommandLine;
 import java.util.Arrays;
 import java.util.Collections;
-import main.org.softlang.megalib.visualizer.cli.CommandLineArguments;
-import main.org.softlang.megalib.visualizer.exceptions.CommandLineException;
+import org.softlang.megalib.visualizer.exceptions.CommandLineException;
 import org.junit.Assert;
 import org.junit.Test;
 
