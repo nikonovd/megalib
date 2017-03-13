@@ -29,7 +29,7 @@ public class FileVisualizer implements Visualizer<File> {
     public File create(Graph graph) {
         String transformed = delegated.create(graph);
         
-        String path = options.getModelName() + "." + options.getType().getFileExtension();
+        String path = options.getModelName() + "." + FileExtensionFactory.get(options.getTransformationType());
         
         try {
             return Files.write(Paths.get(path), transformed.getBytes(StandardCharsets.UTF_8)).toFile();

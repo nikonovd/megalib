@@ -26,8 +26,6 @@ public class ManifestationDetacher implements GraphProcessor {
         String artifactType = manifestsAs.getDestination().getName();
         node.disconnect("manifestsAs").ifPresent(removeable::add);
         node.setType(artifactType);
-        
-        
 
         return true;
     }

@@ -3,13 +3,14 @@
  */
 package org.softlang.megalib.visualizer.transformation;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.softlang.megalib.visualizer.VisualizerOptions;
 import org.softlang.megalib.visualizer.models.Graph;
-import org.softlang.megalib.visualizer.utils.Tuple;
-import org.softlang.megalib.visualizer.utils.VisualizerType;
 
 /**
  *
@@ -18,18 +19,22 @@ import org.softlang.megalib.visualizer.utils.VisualizerType;
  */
 public abstract class Transformer<R> {
 
-    private static final Map<Tuple<VisualizerType, Class<?>>, Function<VisualizerOptions, ? extends Transformer>> TRANSFORMERS = new HashMap<>();
+    private static final Map<String, Function<VisualizerOptions, ? extends Transformer>> TRANSFORMERS = new TreeMap<>();
     
     static {
-        TRANSFORMERS.put(new Tuple<>(VisualizerType.GRAPHVIZ, String.class), (options) -> new DOTTransformer(options));
+        registerTransformer("graphviz", (options) -> new DOTTransformer(options));
     }
     
-    public static void registerTransformer(VisualizerType type, Class<?> clazz, Function<VisualizerOptions, ? extends Transformer> creatingFunc) {
-        TRANSFORMERS.put(new Tuple<>(type, clazz), creatingFunc);
+    public static void registerTransformer(String name, Function<VisualizerOptions, ? extends Transformer> creatingFunc) {
+        TRANSFORMERS.put(name, creatingFunc);
     }
     
-    public static <R> Transformer<R> getInstance(VisualizerOptions options, Class<R> transformerClazz) {
-        return (Transformer<R>) TRANSFORMERS.get(new Tuple<>(options.getType(), transformerClazz)).apply(options);
+    public static <R> Transformer<R> getInstance(VisualizerOptions options) {
+        return TRANSFORMERS.entrySet().stream().filter(e -> e.getKey().equals(options.getTransformationType())).map(Entry::getValue).findFirst().orElseThrow(IllegalStateException::new).apply(options);
+    }
+    
+    public static List<String> getRegisteredTransformerNames() {
+        return TRANSFORMERS.keySet().stream().collect(Collectors.toList());
     }
     
     protected VisualizerOptions options;

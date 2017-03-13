@@ -3,10 +3,8 @@
  */
 package org.softlang.megalib.visualizer;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.softlang.megalib.visualizer.utils.VisualizerType;
 import org.softlang.megalib.visualizer.cli.CommandLineArguments;
 
 /**
@@ -17,14 +15,15 @@ public class VisualizerOptions {
 
     public static VisualizerOptions of(CommandLineArguments args) {
         Path filePath = Paths.get(args.getFilePath());
-        return new VisualizerOptions(filePath.toAbsolutePath(), VisualizerType.valueOf(args.getType().toUpperCase()));
+        return new VisualizerOptions(filePath.toAbsolutePath(), args.getType().toLowerCase());
     }
 
     private Path filePath;
+    
+    private String type;
 
-    private VisualizerType type;
 
-    VisualizerOptions(Path filePath, VisualizerType type) {
+    VisualizerOptions(Path filePath, String type) {
         this.filePath = filePath;
         this.type = type;
     }
@@ -37,7 +36,7 @@ public class VisualizerOptions {
         return filePath;
     }
 
-    public VisualizerType getType() {
+    public String getTransformationType() {
         return type;
     }
 

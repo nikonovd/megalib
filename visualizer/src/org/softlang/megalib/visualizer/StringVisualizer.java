@@ -15,7 +15,7 @@ public class StringVisualizer implements Visualizer<String> {
     private Transformer<? extends String> transformer;
 
     public StringVisualizer(VisualizerOptions options) {
-        this.transformer = Transformer.getInstance(options, String.class);
+        this.transformer = Transformer.getInstance(options);
     }
 
     @Override
