@@ -7,8 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,16 +33,12 @@ import main.antlr.techdocgrammar.MegalibLexer;
 import main.antlr.techdocgrammar.MegalibParser;
 
 public class ModelLoader {
-    
-    private static final String PRELUDE_DEFAULT_PATH = "../models/Prelude.megal";
 
     private Queue<String> todos;
     private File root;
 
     private MegaModel model;
     private List<String> typeErrors;
-    
-    private Path preludeStorage;
 
     public ModelLoader(String preludePath){
         todos = new LinkedList<>();
@@ -61,6 +55,7 @@ public class ModelLoader {
     public ModelLoader(){
         this("../models/Prelude.megal");
     }
+
     public MegaModel getModel() {
         return model;
     }
@@ -101,15 +96,12 @@ public class ModelLoader {
                 ParserListener pl = (ParserListener) parse(pdata, new ParserListener(model));
                 model = pl.getModel();
                 typeErrors.addAll(pl.getTypeErrors());
-                if (!pl.getTypeErrors().isEmpty()) {
-                    pl.getTypeErrors().forEach(w -> System.err.println(w));
-                    throw new TypeException("Resolve critical errors first: "
-                                            + (abspath.equals("") ? " in " + abspath : ""));
-                }
+                if (!pl.getTypeErrors().isEmpty())
+                    return false;
             }
             return true;
         }
-        catch (TypeException | IOException | ParserException e) {
+        catch(IOException | ParserException e){
             typeErrors.add(e.getMessage());
             return false;
         }

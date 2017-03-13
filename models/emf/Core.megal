@@ -2,19 +2,13 @@ module emf.Core
 
 import java.JavaPlatform
 import Eclipse
-import XML
-import XMI
 
 /* 
 TODO: The story has to be cleaned up.
 
 List of functions:
 generate empty Ecore
-Initialize Ecore Diagram File
 edit Ecore in eclipse (generated Annotation)
-generateJava from Ecore
-serialize
-deserialize
 generate instance model
 edit instance model
 model validation
@@ -34,59 +28,66 @@ EMF : Plugin;
 
 /* Its main component is EMFCore which contains Ecore's 
 metametamodel as several Java classes. */
-EMF.Core : Component;
+EMF.ECore : Component;
     = "http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/overview-tree.html";
     partOf EMF;
     uses Java.
 EcoreJava : ProgrammingLanguage;
     = "http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/org/eclipse/emf/ecore/package-summary.html";
-    subsetOf Java.
-    ^implements EMFCore.
-?ecore.metametaModel : Artifact;
-    partOf EMFCore;
+    subsetOf Java;
+    ^implements EMF.Core.
+?ecoremetametaModel : Artifact;
+    partOf EMF.Core;
     elementOf EcoreJava;
     hasRole Schema;
     manifestsAs File+;
-    conformsTo ?ecore.metametaModel.
+    conformsTo ?ecoremetametaModel.
 
 /* An important component is the Generator that takes a generation
 configuration which is itself a model persisted in XMI. */
-EcoreXMI : DataRepresentationLanguage;
+EcoreXMI : DataExchangeLanguage;
     = "http://download.eclipse.org/modeling/emf/emf/javadoc/2.5.0/org/eclipse/emf/ecore/xmi/XMIResource.html";
     subsetOf XMI;
-    ^encodedInto EcoreJava.
-GeneratorXMI : ConfigurationLanguage;
+    encodes EcoreJava.
+GeneratorCfgXmi : ConfigurationLanguage;
     = "http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/org/eclipse/emf/codegen/ecore/genmodel/GenModel.html";
     subsetOf XMI.
-generateJava : GeneratorXMI # EcoreXMI -> EcoreJava.
+generateGenerator : EcoreXMI -> GeneratorCfgXmi.
+generateJava : GeneratorCfgXmi # EcoreXMI -> EcoreJava.
 EMF.CodeGenerator : Component;
     = "http://www.eclipse.org/modeling/emf/docs/2.x/tutorials/clibmod/clibmod_emf2.0.html";
     partOf EMF;
     uses Java;
-    implements GeneratorModel;
+    implements GeneratorCfgXmi;
+    implements generateGenerator;
     implements generateJava.
 
 /* While Ecore is the language for metamodels written in XMI, there are multiple existing
 languages that are subset of XMI that form DSLs. But this set to serialize models in XMI 
 is different from the metamodeling set. */
-?JavaObject.DSL : ObjectGraph;
+?DSLJVMObject : ValueLanguage;
+    encodes Object;
     subsetOf JVM.Object.
-?XMI.DSLs : DomainSpecificLanguage; //TODO: The universe holding all sets for all DSLs
+?DSLXMI : DomainSpecificLanguage; //TODO: Defined or Implemented? keep it or remove it
     subsetOf XMI.
-?XMI.CustomDSL : DomainSpecificLanguage;
-    subsetOf ?XMI.DSLs.
+?CustomDSLXMI : DomainSpecificLanguage;
+    subsetOf ?DSLXMI.
 ?genModel : Artifact;
-    elementOf GeneratorModel;
+    elementOf GeneratorCfgXmi;
     hasRole Configuration;
     manifestsAs File.
 ?javaModel : Artifact;
-    elementOf Java.Ecore;
+    elementOf EcoreJava;
     hasRole MdeMetamodel;
     manifestsAs File+;
-    defines ?JavaObject.DSL.
-?ecoreFile : Artifact;
-    elementOf XMI.Ecore;
+    defines ?DSLJVMObject.
+?metaModel : Artifact;
+    elementOf EcoreXMI;
     hasRole MdeMetamodel;
     manifestsAs File;
-    defines ?XMI.CustomDSL.
+    defines ?CustomDSLXMI.
 generateJava(?genModel,?ecoreFile) |-> ?javaModel.
+?model : Artifact;
+    elementOf CustomDSLXMI;
+    hasRole MdeModel;
+    manifestsAs File.

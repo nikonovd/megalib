@@ -137,7 +137,7 @@ public class ParserListenerTest {
 
     @Test
     public void addInstanceOfProgrammingLanguage() throws ParserException, IOException {
-        String input = "/**/Java : ProgrammingLanguage.";
+        String input = "/**/XYZ : ProgrammingLanguage.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         Map<String, String> imap = ml.getModel().getInstanceOfMap();
@@ -147,7 +147,7 @@ public class ParserListenerTest {
 
     @Test
     public void addInstanceOfArtifact() throws ParserException, IOException {
-        String input = "/**/Python : ProgrammingLanguage. " + "a : Artifact; " + "elementOf Python; "
+        String input = "/**/a : Artifact; " + "elementOf Python; "
                 + "hasRole MvcModel; " + "manifestsAs File.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
@@ -162,16 +162,16 @@ public class ParserListenerTest {
 
     @Test
     public void addInversePartOf() throws ParserException, IOException {
-        String input = "/**/ANTLRPython : ProgrammingLanguage. Python : ProgrammingLanguage; ^subsetOf ANTLRPython.";
+        String input = "/**/ANTLRXYZ : ProgrammingLanguage. XYZ : ProgrammingLanguage; ^subsetOf ANTLRXYZ.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         assertEquals(0, ml.getTypeErrors().size());
         Map<String,String> imap = ml.getModel().getInstanceOfMap();
-        assertTrue(imap.containsKey("ANTLRPython"));
-        assertTrue(imap.containsKey("Python"));
+        assertTrue(imap.containsKey("ANTLRXYZ"));
+        assertTrue(imap.containsKey("XYZ"));
         assertTrue(ml.getModel().getRelationshipInstanceMap().containsKey("subsetOf"));
         Set<Relation> rmap = ml.getModel().getRelationshipInstanceMap().get("subsetOf");
-        assertTrue(rmap.contains(new Relation("ANTLRPython", "Python")));
+        assertTrue(rmap.contains(new Relation("ANTLRXYZ", "XYZ")));
     }
 
     @Test
@@ -254,8 +254,8 @@ public class ParserListenerTest {
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         Map<String, Set<Relation>> actual = ml.getModel().getRelationshipInstanceMap();
-
-        assertFalse(actual.containsKey("subsetOf"));
+        Relation r = new Relation("a", "b");
+        assertFalse(actual.get("subsetOf").contains(r));
         assertEquals(1, ml.getTypeErrors().size());
         assertTrue(ml.getTypeErrors()
                    .contains("Error at instance of subsetOf: 'a subsetOf b' does not fit any declaration."));
@@ -267,8 +267,8 @@ public class ParserListenerTest {
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         Map<String, Set<Relation>> actual = ml.getModel().getRelationshipInstanceMap();
-
-        assertFalse(actual.containsKey("subsetOf"));
+        Relation r = new Relation("a", "b");
+        assertFalse(actual.get("subsetOf").contains(r));
         assertEquals(1, ml.getTypeErrors().size());
         assertTrue(ml.getTypeErrors()
                    .contains("Error at instance of subsetOf: 'b subsetOf a' does not fit any declaration."));
@@ -282,7 +282,8 @@ public class ParserListenerTest {
         ml.loadString(input);
         Map<String, Set<Relation>> actual = ml.getModel().getRelationshipInstanceMap();
 
-        assertFalse(actual.containsKey("subsetOf"));
+        Relation r = new Relation("a", "b");
+        assertFalse(actual.get("subsetOf").contains(r));
         assertEquals(1, ml.getTypeErrors().size());
         assertTrue(ml.getTypeErrors()
                    .contains("Error at instance of subsetOf: 'a subsetOf b' fits multiple declarations."));
@@ -294,7 +295,8 @@ public class ParserListenerTest {
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         Map<String, Set<Relation>> actual = ml.getModel().getRelationshipInstanceMap();
-        assertFalse(actual.containsKey("subsetOf"));
+        Relation r = new Relation("a", "b");
+        assertFalse(actual.get("subsetOf").contains(r));
         assertEquals(1, ml.getTypeErrors().size());
         assertTrue(ml.getTypeErrors().contains("Error at instance of subsetOf: a is not instantiated."));
     }
@@ -305,7 +307,8 @@ public class ParserListenerTest {
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         Map<String, Set<Relation>> actual = ml.getModel().getRelationshipInstanceMap();
-        assertFalse(actual.containsKey("subsetOf"));
+        Relation r = new Relation("a", "b");
+        assertFalse(actual.get("subsetOf").contains(r));
         assertEquals(1, ml.getTypeErrors().size());
         assertTrue(ml.getTypeErrors().contains("Error at instance of subsetOf: b is not instantiated."));
     }
@@ -463,7 +466,7 @@ public class ParserListenerTest {
 
     @Test
     public void addFunctionApplicationNotInstantiatedInput() throws ParserException, IOException {
-        String input = "/**/l : DataRepresentationLanguage. " + "f : l -> l. " + "b : Artifact. " + "b elementOf l. "
+        String input = "/**/l : DataExchangeLanguage. " + "f : l -> l. " + "b : Artifact. " + "b elementOf l. "
                 + "f(a)|->b.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
@@ -475,7 +478,7 @@ public class ParserListenerTest {
 
     @Test
     public void addFunctionApplicationNotInstantiatedOutput() throws ParserException, IOException {
-        String input = "/**/l : DataRepresentationLanguage. " + "f : l -> l. " + "a : Artifact. " + "a elementOf l. "
+        String input = "/**/l : DataExchangeLanguage. " + "f : l -> l. " + "a : Artifact. " + "a elementOf l. "
                 + "f(a)|->b.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
@@ -487,7 +490,7 @@ public class ParserListenerTest {
 
     @Test
     public void addFunctionApplicationUnfitDomain() throws ParserException, IOException {
-        String input = "/**/l1 : DataRepresentationLanguage. " + "l2 : DataRepresentationLanguage. "
+        String input = "/**/l1 : DataExchangeLanguage. " + "l2 : DataExchangeLanguage. "
                 + "f : l1 # l2 -> l2. " + "a1 : Artifact. " + "a1 elementOf l1. " + "a1 hasRole MvcModel. "
                 + "a1 manifestsAs File. " + "a2 : Artifact. " + "a2 elementOf l2. " + "f(a1,a1)|->a2.";
         ModelLoader ml = new ModelLoader();
@@ -501,7 +504,7 @@ public class ParserListenerTest {
 
     @Test
     public void addFunctionApplicationUnfitRange() throws ParserException, IOException {
-        String input = "/**/l1 : DataRepresentationLanguage. " + "l2 : DataRepresentationLanguage. "
+        String input = "/**/l1 : DataExchangeLanguage. " + "l2 : DataExchangeLanguage. "
                 + "f : l1 # l2 -> l2. " + "a1 : Artifact. " + "a1 elementOf l1. " + "a2 : Artifact. "
                 + "a2 elementOf l2. " + "f(a1,a2)|->a1.";
         ModelLoader ml = new ModelLoader();
@@ -515,7 +518,7 @@ public class ParserListenerTest {
 
     @Test
     public void addFunctionApplicationSubset() throws ParserException, IOException {
-        String input = "/**/l1 : DataRepresentationLanguage. " + "l2 : DataRepresentationLanguage. "
+        String input = "/**/l1 : DataExchangeLanguage. " + "l2 : DataExchangeLanguage. "
                 + "l2 subsetOf l1. " + "f : l1 # l2 -> l2. " + "a1 : Artifact. " + "a1 elementOf l1. "
                 + "a2 : Artifact. " + "a2 elementOf l2. " + "f(a2,a2)|->a2.";
         ModelLoader ml = new ModelLoader();
@@ -539,16 +542,16 @@ public class ParserListenerTest {
 
     @Test
     public void testTurtleSyntaxStepwiseFailure() throws ParserException, IOException {
-        String input = "/**/a : Artifact; " + "elementOf Java;" + "hasRole MvcModel.";
+        String input = "/**/a : Artifact; " + "elementOf XYZ;" + "hasRole MvcModel.";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
         assertEquals(1, ml.getTypeErrors().size());
-        assertEquals("Error at instance of elementOf: Java is not instantiated.", ml.getTypeErrors().get(0));
+        assertEquals("Error at instance of elementOf: XYZ is not instantiated.", ml.getTypeErrors().get(0));
     }
 
     @Test
     public void testTurtleInstanceLink() throws ParserException, IOException {
-        String input = "/**/Java : ProgrammingLanguage;"
+        String input = "/**/XYZ : ProgrammingLanguage;"
                 + "    = \"https://en.wikipedia.org/wiki/Java_(programming_language)\".";
         ModelLoader ml = new ModelLoader();
         ml.loadString(input);
