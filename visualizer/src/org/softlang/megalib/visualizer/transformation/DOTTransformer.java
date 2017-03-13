@@ -3,10 +3,18 @@
  */
 package org.softlang.megalib.visualizer.transformation;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.softlang.megalib.visualizer.VisualizerOptions;
-import org.softlang.megalib.visualizer.models.Edge;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.models.Node;
+import org.softlang.megalib.visualizer.models.configuration.ConfigItem;
+import org.softlang.megalib.visualizer.models.configuration.TransformerConfiguration;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 /**
  *
@@ -14,7 +22,11 @@ import org.softlang.megalib.visualizer.models.Node;
  */
 public class DOTTransformer extends Transformer<String> {
 
-    private DOTTransformationRule rule = new DOTTransformationRule();
+    private static final ConfigItem<String, String> DEFAULT_CONFIG = new ConfigItem<String, String>()
+        .put("color", "black")
+        .put("shape", "oval");
+
+    private TransformerConfiguration config = new DOTConfigurationBuilder().buildConfiguration();
 
     public DOTTransformer(VisualizerOptions options) {
         super(options);
@@ -28,40 +40,47 @@ public class DOTTransformer extends Transformer<String> {
         ManifestationDetacher detacher = new ManifestationDetacher();
 
         detacher.processGraph(g);
-        
-        return process(g).toString();
+
+        return process(g);
     }
 
-    private StringBuilder process(Graph g) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("digraph ")
-            .append(options.getModelName())
-            .append(" {")
-            .append("\n")
-            .append("\trankdir = LR;")
-            .append("\n");
+    private String process(Graph g) {
+        STGroup templateGroup = new STGroupFile("graphviz.stg");
+        ST template = templateGroup.getInstanceOf("graph");
 
-        g.forEachNode(n -> appendNode(sb, n));
+        List<DOTNode> nodes = new LinkedList<>();
 
-        sb.append("\n\n");
+        g.forEachNode(n -> nodes.add(createDOTNode(n)));
 
-        g.forEachEdge(e -> appendEdge(sb, e));
+        template.add("name", options.getModelName());
+        template.add("nodes", nodes);
+        template.add("edges", g.getEdges());
 
-        sb.append("}");
-
-        return sb;
+        return template.render();
     }
 
-    private void appendNode(StringBuilder sb, Node node) {
-        sb.append("\t")
-            .append(rule.transformNode(node))
-            .append("\n");
+    private String getConfigValue(Node node, String attribute) {
+        return getConfigItem(node, attribute).get(attribute);
     }
 
-    private void appendEdge(StringBuilder sb, Edge edge) {
-        sb.append("\t")
-            .append(rule.transformEdge(edge))
-            .append("\n");
+    private ConfigItem<String, String> getConfigItem(Node node, String attribute) {
+        for (String key : getKeyHierarchy(node)) {
+            if (config.contains(key) && config.get(key).contains(attribute)) {
+                return config.get(key);
+            }
+        }
+        return DEFAULT_CONFIG;
+    }
+
+    private List<String> getKeyHierarchy(Node node) {
+        return Stream.concat(
+            Stream.of(node.getName(), node.getType()),
+            node.getInstanceHierarchy().stream()
+        ).collect(Collectors.toList());
+    }
+
+    private DOTNode createDOTNode(Node node) {
+        return new DOTNode(node, getConfigValue(node, "color"), getConfigValue(node, "shape"));
     }
 
 }

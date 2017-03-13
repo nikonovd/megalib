@@ -3,10 +3,13 @@
  */
 package org.softlang.megalib.visualizer.models;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +20,7 @@ public class Graph implements Iterable<Node> {
 
     private String name;
 
-    private Map<String, Node> nodes = new LinkedHashMap<>();
+    private Map<String, Node> nodes = new TreeMap<>();
 
     Graph(String name) {
         this.name = name;
@@ -88,6 +91,17 @@ public class Graph implements Iterable<Node> {
             return false;
         }
         return true;
+    }
+    
+    public Collection<Node> getNodes() {
+        return nodes.values();
+    }
+    
+    public Collection<Edge> getEdges() {
+        Set<Edge> edges = new HashSet<>();
+        forEachEdge(edges::add);
+        
+        return edges;
     }
 
     @Override

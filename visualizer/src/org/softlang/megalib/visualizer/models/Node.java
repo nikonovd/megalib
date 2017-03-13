@@ -5,7 +5,6 @@ package org.softlang.megalib.visualizer.models;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,15 +21,23 @@ public class Node {
     private String name;
 
     private String link;
-    
+
     private LinkedList<String> instanceHierarchy = new LinkedList<>();
 
     private Map<String, Edge> edges = new LinkedHashMap<>();
 
-    Node(String type, String name, String link) {
+    public Node(String type, String name, String link) {
         this.type = type;
         this.name = name;
         this.link = link;
+    }
+
+    protected Node(String type, String name, String link, LinkedList<String> instanceHierarchy, Map<String, Edge> edges) {
+        this.type = type;
+        this.name = name;
+        this.link = link;
+        this.instanceHierarchy = instanceHierarchy;
+        this.edges = edges;
     }
 
     public void forEachEdge(Consumer<? super Edge> consumer) {
@@ -59,7 +66,7 @@ public class Node {
             return Optional.empty();
         }
         edges.remove(relation, toRemove);
-        
+
         return Optional.of(toRemove.getDestination());
     }
 
@@ -92,7 +99,11 @@ public class Node {
     public LinkedList<String> getInstanceHierarchy() {
         return instanceHierarchy;
     }
-    
+
+    public Map<String, Edge> getEdges() {
+        return edges;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;

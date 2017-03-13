@@ -1,7 +1,7 @@
 /*
  *  All rights reserved.
  */
-package org.softlang.megalib.visualizer.models.configuration;
+package org.softlang.megalib.visualizer.transformation;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Properties;
+import org.softlang.megalib.visualizer.models.configuration.ConfigurationBuilder;
+import org.softlang.megalib.visualizer.models.configuration.TransformerConfiguration;
 
 /**
  *
