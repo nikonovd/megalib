@@ -1,7 +1,7 @@
 /*
  *  All rights reserved.
  */
-package org.softlang.megalib.visualizer.transformation.dot;
+package org.softlang.megalib.visualizer.transformation;
 
 import java.util.HashSet;
 import java.util.Set;

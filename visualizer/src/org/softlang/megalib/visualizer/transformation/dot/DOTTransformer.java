@@ -3,6 +3,7 @@
  */
 package org.softlang.megalib.visualizer.transformation.dot;
 
+import org.softlang.megalib.visualizer.transformation.ManifestationDetacher;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
