@@ -3,7 +3,7 @@
  */
 package org.softlang.megalib.visualizer.transformation;
 
-import org.softlang.megalib.visualizer.transformation.dot.DOTTransformer;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,23 +21,33 @@ import org.softlang.megalib.visualizer.models.Graph;
 public abstract class Transformer<R> {
 
     private static final Map<String, Function<VisualizerOptions, ? extends Transformer>> TRANSFORMERS = new TreeMap<>();
-    
+
     static {
-        registerTransformer("graphviz", (options) -> new DOTTransformer(options));
+        // Load all subclasses of it dynamically to call the class initializer that register the concrete Transformer subclass to this factory.
+        FastClasspathScanner scanner = new FastClasspathScanner();
+        scanner.addClassLoader(Transformer.class.getClassLoader());
+        scanner.matchSubclassesOf(Transformer.class, (clazz) -> {
+            try {
+                Class.forName(clazz.getCanonicalName());
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        scanner.scan();
     }
-    
+
     public static void registerTransformer(String name, Function<VisualizerOptions, ? extends Transformer> creatingFunc) {
         TRANSFORMERS.put(name, creatingFunc);
     }
-    
+
     public static <R> Transformer<R> getInstance(VisualizerOptions options) {
         return TRANSFORMERS.entrySet().stream().filter(e -> e.getKey().equals(options.getTransformationType())).map(Entry::getValue).findFirst().orElseThrow(IllegalStateException::new).apply(options);
     }
-    
+
     public static List<String> getRegisteredTransformerNames() {
         return TRANSFORMERS.keySet().stream().collect(Collectors.toList());
     }
-    
+
     protected VisualizerOptions options;
 
     public Transformer(VisualizerOptions options) {

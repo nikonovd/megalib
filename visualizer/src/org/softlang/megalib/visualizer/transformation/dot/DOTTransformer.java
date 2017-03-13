@@ -27,6 +27,11 @@ public class DOTTransformer extends Transformer<String> {
     private static final ConfigItem<String, String> DEFAULT_CONFIG = new ConfigItem<String, String>()
         .put("color", "black")
         .put("shape", "oval");
+    
+    static {
+        System.out.println("asdfgmsdlkfhgmklsfdh");
+        Transformer.registerTransformer("graphviz", (VisualizerOptions options) -> new DOTTransformer(options));
+    }
 
     private TransformerConfiguration config = new DOTConfigurationBuilder().buildConfiguration();
 

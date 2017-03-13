@@ -14,7 +14,7 @@ import org.softlang.megalib.visualizer.models.Node;
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
 public class ManifestationDetacher implements GraphProcessor {
-    
+
     private Set<Node> removeable = new HashSet<>();
 
     public boolean processNode(Node node) {
