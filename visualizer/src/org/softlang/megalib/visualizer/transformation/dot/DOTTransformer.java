@@ -29,7 +29,6 @@ public class DOTTransformer extends Transformer<String> {
         .put("shape", "oval");
     
     static {
-        System.out.println("asdfgmsdlkfhgmklsfdh");
         Transformer.registerTransformer("graphviz", (VisualizerOptions options) -> new DOTTransformer(options));
     }
 
