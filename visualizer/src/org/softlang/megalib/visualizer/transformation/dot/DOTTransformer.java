@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.softlang.megalib.visualizer.FileExtensionFactory;
 import org.softlang.megalib.visualizer.VisualizerOptions;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.models.Node;
@@ -30,6 +31,7 @@ public class DOTTransformer extends Transformer<String> {
     
     static {
         Transformer.registerTransformer("graphviz", (VisualizerOptions options) -> new DOTTransformer(options));
+        FileExtensionFactory.registerFileExtension("graphviz", "dot");
     }
 
     private TransformerConfiguration config = new DOTConfigurationBuilder().buildConfiguration();

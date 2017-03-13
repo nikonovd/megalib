@@ -56,6 +56,7 @@ public class ModelReader {
 
     /**
      * Returns the module name
+     *
      * @return the module name
      */
     public String getModuleName() {

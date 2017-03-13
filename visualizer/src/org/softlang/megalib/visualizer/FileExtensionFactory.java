@@ -14,10 +14,6 @@ public class FileExtensionFactory {
 
     private static Map<String, String> FILE_EXTENSIONS = new HashMap<>();
 
-    static {
-        registerFileExtension("graphviz", "dot");
-    }
-
     public static void registerFileExtension(String transformer, String extension) {
         FILE_EXTENSIONS.put(transformer, extension);
     }
