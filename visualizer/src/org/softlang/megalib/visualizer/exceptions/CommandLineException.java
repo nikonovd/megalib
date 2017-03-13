@@ -3,8 +3,6 @@
  */
 package org.softlang.megalib.visualizer.exceptions;
 
-import org.softlang.megalib.visualizer.MegaModelVisualizerException;
-
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>

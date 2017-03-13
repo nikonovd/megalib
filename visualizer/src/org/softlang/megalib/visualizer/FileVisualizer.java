@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.softlang.megalib.visualizer.exceptions.MegaModelVisualizerException;
 import org.softlang.megalib.visualizer.models.Graph;
 
 /**
@@ -22,7 +23,7 @@ public class FileVisualizer implements Visualizer<File> {
     
     public FileVisualizer(VisualizerOptions options) {
         this.options = options;
-        delegated = new StringVisualizer(options);
+        this.delegated = new StringVisualizer(options);
     }
     
     @Override
@@ -34,7 +35,7 @@ public class FileVisualizer implements Visualizer<File> {
         try {
             return Files.write(Paths.get(path), transformed.getBytes(StandardCharsets.UTF_8)).toFile();
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new MegaModelVisualizerException(ex);
         }
     }
 

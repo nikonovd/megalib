@@ -3,8 +3,6 @@
  */
 package org.softlang.megalib.visualizer.models.configuration;
 
-import java.util.Optional;
-
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>

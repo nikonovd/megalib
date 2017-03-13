@@ -40,7 +40,7 @@ public class CommandLine {
         this.options = createCommandLineOptions();
     }
 
-    public CommandLine parse(String[] arguments) throws CommandLineException {
+    public CommandLine parse(String[] arguments) {
         try {
             this.cli = this.parser.parse(options, arguments);
         } catch (ParseException ex) {
@@ -49,7 +49,7 @@ public class CommandLine {
         return this;
     }
     
-    private void throwHelpException(Exception parent) throws CommandLineException {
+    private void throwHelpException(Exception parent) {
         StringWriter messageWriter = new StringWriter();
         PrintWriter helpWriter = new PrintWriter(messageWriter);
         

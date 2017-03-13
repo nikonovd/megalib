@@ -1,13 +1,13 @@
 /*
  *  All rights reserved.
  */
-package org.softlang.megalib.visualizer;
+package org.softlang.megalib.visualizer.exceptions;
 
 /**
  *
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
-public abstract class MegaModelVisualizerException extends Exception {
+public class MegaModelVisualizerException extends RuntimeException {
 
     public MegaModelVisualizerException(String message) {
         super(message);

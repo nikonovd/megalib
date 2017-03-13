@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.java.megalib.models.Function;
 import org.java.megalib.models.MegaModel;
 import org.java.megalib.models.Relation;
-import org.softlang.megalib.visualizer.MegaModelVisualizerException;
+import org.softlang.megalib.visualizer.exceptions.MegaModelVisualizerException;
 import org.softlang.megalib.visualizer.ModelReader;
 import org.softlang.megalib.visualizer.VisualizerOptions;
 
@@ -131,7 +131,7 @@ public class GraphFactory {
 
     private Node lazyCreateImportedNode(Graph graph, String name) {
         if (!resolveableModel.getInstanceOfMap().containsKey(name)) {
-            throw new IllegalArgumentException("Could not resolve node " + name);
+            throw new MegaModelVisualizerException("Could not resolve node " + name);
         }
         String type = resolveableModel.getInstanceOfMap().get(name);
         Node result = createNode(name, type, resolveableModel);

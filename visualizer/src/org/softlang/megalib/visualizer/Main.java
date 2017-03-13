@@ -3,6 +3,7 @@
  */
 package org.softlang.megalib.visualizer;
 
+import org.softlang.megalib.visualizer.exceptions.MegaModelVisualizerException;
 import org.java.megalib.parser.ParserException;
 import org.softlang.megalib.visualizer.cli.CommandLine;
 import org.softlang.megalib.visualizer.models.Graph;
@@ -16,7 +17,6 @@ import org.softlang.megalib.visualizer.transformation.Transformer;
 public class Main {
 
     public static void main(String[] args) throws ParserException {
-
         try {
             CommandLine cli = new CommandLine(Transformer.getRegisteredTransformerNames())
                 .parse(args);
