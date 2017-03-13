@@ -4,6 +4,14 @@ checker/megalib.checker/checker.jar
 *.prefs
 .metadata/
 checker/target/
+visualizer/target
 .recommenders/
 checker/Prelude.megal
 models/checker.jar
+/visualizer/target/
+*.dot
+*.xml
+*.megal
+*.png
+*.svg
+/visualizer/nbproject/

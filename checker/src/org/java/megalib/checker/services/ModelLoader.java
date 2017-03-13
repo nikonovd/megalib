@@ -107,7 +107,7 @@ public class ModelLoader {
         }
     }
 
-    public MegalibBaseListener parse(String data, MegalibBaseListener listener) throws ParserException, IOException {
+    public <T extends MegalibBaseListener> T parse(String data, T listener) throws ParserException, IOException {
         ByteArrayInputStream stream = new ByteArrayInputStream(data.getBytes());
         ANTLRInputStream antlrStream = new ANTLRInputStream(stream);
         MegalibLexer lexer = new MegalibLexer(antlrStream);
