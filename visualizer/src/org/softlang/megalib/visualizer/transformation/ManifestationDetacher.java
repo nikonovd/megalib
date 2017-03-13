@@ -8,7 +8,6 @@ import java.util.Set;
 import org.softlang.megalib.visualizer.models.Edge;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.models.Node;
-import org.softlang.megalib.visualizer.transformation.GraphProcessor;
 
 /**
  *
