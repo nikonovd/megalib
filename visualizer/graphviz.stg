@@ -2,11 +2,11 @@ graph(name, nodes, edges) ::= <<digraph <name> {
     rankdir = LR;
 
     // all nodes
-    <if(nodes)><nodes:node()><endif>
+    <if(nodes)><nodes:node(); separator="\n"><endif>
 
     // all edges
-    <if(edges)><edges:edge()><endif>
+    <if(edges)><edges:edge(); separator="\n"><endif>
 }>>
  
-node(n) ::= "\"<n.name>\" [shape=\"<n.shape>\" color=\"<n.color>\" label=\"<n.name>\"];<\n>"
-edge(e) ::= "\"<e.origin.name>\" -> \"<e.destination.name>\" [label=\"<e.label>\"];<\n>"
+node(n) ::= "\"<n.name>\" [shape=\"<n.shape>\" color=\"<n.color>\" label=\"<n.name>\"];"
+edge(e) ::= "\"<e.origin.name>\" -> \"<e.destination.name>\" [label=\"<e.label>\"];"
