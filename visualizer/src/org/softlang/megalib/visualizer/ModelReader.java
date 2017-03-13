@@ -33,7 +33,7 @@ public class ModelReader {
 
     public MegaModel readFull() throws ModelReaderException {
         try {
-            loader.loadFile(options.getFilePath().toString());
+            loader.loadFile(options.getFilePath().toAbsolutePath().toString());
             
             return loader.getModel();
         } catch (IOException ex) {

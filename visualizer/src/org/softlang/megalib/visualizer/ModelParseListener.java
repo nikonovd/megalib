@@ -16,8 +16,7 @@ import org.java.megalib.checker.services.Substitution;
 import org.java.megalib.models.MegaModel;
 
 /**
- *
- * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
+ * This class is derived from the megalib checker project. Type checks are omitted!
  */
 public class ModelParseListener extends MegalibBaseListener {
 
