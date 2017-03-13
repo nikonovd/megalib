@@ -2,6 +2,7 @@ module Abstract
 
 /* Serializer */
 ?PL : ProgrammingLanguage;
+    encodedAs Text;
     facilitates ObjectOrientedProgramming.
 ?Serializer : Library;
     uses ?PL;
@@ -9,8 +10,11 @@ module Abstract
     facilitates Serialization.
 
 /* Object serialization */
-?OL : ObjectGraph.
-?D : DataRepresentationLanguage.
+?OL : ValueLanguage;
+    encodes Object.
+?D : DataExchangeLanguage;
+    encodedAs Text;
+    encodedAs Markup.
 f : ?OL -> ?D.
 
 /* conformance to data types in an OO program */
@@ -26,17 +30,17 @@ f : ?OL -> ?D.
     defines ?OL.
 ?object : Artifact;
     elementOf ?OL;
-    hasRole Value;
     manifestsAs Transient;
+    hasRole Database;
     conformsTo ?program.
 
 /* Actual serialization */
-?DS : DataRepresentationLanguage;
+?DS : DataExchangeLanguage;
     subsetOf ?D.
 ?program defines ?DS.
 ?data : Artifact;
     elementOf ?DS;
-    hasRole Value;
+    hasRole Database;
     manifestsAs File;
     correspondsTo ?object.
 f(?object) |-> ?data.

@@ -52,7 +52,6 @@ public class WellformednessCheck {
         partOfCheck();
         fragmentPartOfCheck();
         partOfFragmentCheck();
-        languageDefinedOrImplemented();
         transientIsInputOrOutput();
         cyclicSubtypingChecks();
         cyclicRelationChecks("subsetOf");
@@ -74,6 +73,10 @@ public class WellformednessCheck {
                     warnings.add("The entity " + inst
                                  + " is underspecified. Please state a specific subtype of Language.");
                 }
+                if(map.get(inst).equals("System")){
+                    warnings.add("The entity " + inst
+                                 + " is underspecified. Please state a specific subtype of System.");
+                }
                 if(!model.getLinkMap().containsKey(inst) && !map.get(inst).equals("Function")){
                     warnings.add("The entity " + inst + " misses a Link for further reading.");
                 }
@@ -93,6 +96,18 @@ public class WellformednessCheck {
                                      + " does not use any language. Please state language usage.");
                     }
                 }
+                if(model.isInstanceOf(inst, "Artifact")){
+                    Set<Relation> roleSet = model.getRelationshipInstanceMap().get("hasRole");
+                    if(null == roleSet){
+                        warnings.add("Role missing for " + inst);
+                        continue;
+                    }
+                    Set<Relation> roles = roleSet.parallelStream().filter(r -> r.getSubject().equals(inst))
+                                  .collect(Collectors.toSet());
+                    if(roles.isEmpty()){
+                        warnings.add("Role missing for " + inst);
+                    }
+                }
             }
             if(model.isInstanceOf(inst, "Artifact")){
                 if(!model.getElementOfMap().containsKey(inst)){
@@ -103,20 +118,10 @@ public class WellformednessCheck {
                     warnings.add("Manifestation missing for " + inst);
                     continue;
                 }
-                Set<Relation> fset = manifestSet.parallelStream().filter(r -> r.getSubject().equals(inst))
+                Set<Relation> manifestations = manifestSet.parallelStream().filter(r -> r.getSubject().equals(inst))
                                                 .collect(Collectors.toSet());
-                if(fset.isEmpty()){
+                if(manifestations.isEmpty()){
                     warnings.add("Manifestation missing for " + inst);
-                }
-
-                Set<Relation> roleSet = model.getRelationshipInstanceMap().get("hasRole");
-                if(null == roleSet){
-                    warnings.add("Role misssing for " + inst);
-                    continue;
-                }
-                fset = roleSet.parallelStream().filter(r -> r.getSubject().equals(inst)).collect(Collectors.toSet());
-                if(fset.isEmpty()){
-                    warnings.add("Role misssing for " + inst);
                 }
             }
         }
@@ -187,28 +192,6 @@ public class WellformednessCheck {
                 warnings.add("The following parts of the fragment " + f + " are not fragments and are thus invalid:"
                              + diff.toString());
             }
-        }
-    }
-
-    /**
-     * Every language has to be defined or implemented.
-     */
-    private void languageDefinedOrImplemented() {
-        Set<String> languages = model.getInstanceOfMap().keySet().parallelStream()
-                                     .filter(i -> model.isInstanceOf(i, "Language") && !i.startsWith("?"))
-                                     .collect(Collectors.toSet());
-        Set<String> implementedUnionDefined = new HashSet<>();
-        if(model.getRelationshipInstanceMap().containsKey("defines")){
-            implementedUnionDefined.addAll(model.getRelationshipInstanceMap().get("defines").parallelStream()
-                                                .map(r -> r.getObject()).collect(Collectors.toSet()));
-        }
-        if(model.getRelationshipInstanceMap().containsKey("implements")){
-            implementedUnionDefined.addAll(model.getRelationshipInstanceMap().get("implements").parallelStream()
-                                                .map(r -> r.getObject()).collect(Collectors.toSet()));
-        }
-        languages.removeAll(implementedUnionDefined);
-        for(String l : languages){
-            warnings.add("State a defining artifact or an implementing technology for the language " + l + ".");
         }
     }
 
