@@ -4,6 +4,7 @@
 package org.softlang.megalib.visualizer.transformation.yed;
 
 import org.softlang.megalib.visualizer.VisualizerOptions;
+import org.softlang.megalib.visualizer.exceptions.MegaModelVisualizerException;
 import org.softlang.megalib.visualizer.models.Graph;
 import org.softlang.megalib.visualizer.transformation.Transformer;
 
@@ -23,7 +24,7 @@ public class YEDTransformer extends Transformer<String> {
 
     @Override
     public String transform(Graph g) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new MegaModelVisualizerException("Not supported yet.");
     }
 
 }
