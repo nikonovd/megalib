@@ -53,3 +53,4 @@ Contribution to this project requires several steps to be done.
    ```
    Otherwise build of this project will fail.
 1. Apply extensions and changes to the code. For advances extension techniques, visit the [wiki](https://github.com/nikonovd/megalib/wiki)
+1. Use maven to build this project. A distributable and executable jar will be provided within the target directory.
