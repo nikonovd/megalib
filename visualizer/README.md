@@ -4,10 +4,12 @@ A visualization library for MegaL models.
 ## Motivation
 [MegaL](https://github.com/softlang/megalib/blob/master/docs/LanguageDescription.pdf) is a text-based modeling language to describe relations between software artifacts and their corresponding concepts. As textual models are rather hard to read, a visualization library is to be considered to create a graphical representation of the model. Megalib visualizer is a component implemented as a part of the megalib providing this functionality.
 
+The megalib visualizer is designed and implemented to be extendible using a flexible design. It provides several classes and interfaces that will help developers extending the library and providing other concrete visualizer adapters.
+
 ## Installation
 Before installing the visualizer library, please ensure that your target machine provides a Java Runtime Environment with minimal version 8. Check your installed Java version and update if necessary. You can download the latest JRE 8 [here](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
 
-This repository provides a runnable binary in form of a jar file. To download the latest release of the visualizer, check the [releases](https://github.com/nikonovd/megalib/releases). It is also possible to compile the project source code yourself. For further instructions, refer to [Custom build](#custom-build)
+This repository provides a runnable binary in form of a jar file. To download the latest release of the visualizer, check the [releases](https://github.com/nikonovd/megalib/releases). It is also possible to compile the project source code yourself. For further instructions, refer to [Custom build](#contribution)
 
 Anyway, the jar file, regardless of the origin, must obtain the following file hierarchy:
 ```
@@ -33,4 +35,5 @@ This command takes the MySQL.megal model intoc accounting and visualized it usin
 
 **Note:** Although yed is a valid type parameter, the yed visualizer is not implemented yet. Executing the visualizer with this type will result in an error.
 
-## Custom build
+## Contribution
+
