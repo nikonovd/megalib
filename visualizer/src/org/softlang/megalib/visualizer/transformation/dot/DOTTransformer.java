@@ -72,6 +72,8 @@ public class DOTTransformer extends Transformer<String> {
     }
 
     private ConfigItem<String, String> getConfigItem(Node node, String attribute) {
+        // Traverse the configuration hierarchy to determine if there is a configuration item present
+        // Hence: name -> type -> supertype (until finished) -> default configuration
         for (String key : getKeyHierarchy(node)) {
             if (config.contains(key) && config.get(key).contains(attribute)) {
                 return config.get(key);

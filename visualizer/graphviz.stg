@@ -1,11 +1,15 @@
 graph(name, nodes, edges) ::= <<digraph <name> {
     rankdir = LR;
 
+    <if(nodes)>
     // all nodes
-    <if(nodes)><nodes:node(); separator="\n"><endif>
-
+    <nodes:node(); separator="\n">
+    
+    <if(edges)>
     // all edges
-    <if(edges)><edges:edge(); separator="\n"><endif>
+    <edges:edge(); separator="\n">
+    <endif>
+    <endif>
 }>>
  
 node(n) ::= "\"<n.name>\" [shape=\"<n.shape>\" color=\"<n.color>\" label=\"<n.name>\"];"

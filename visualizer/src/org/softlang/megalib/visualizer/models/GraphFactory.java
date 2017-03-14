@@ -130,13 +130,16 @@ public class GraphFactory {
     }
 
     private Node lazyCreateImportedNode(Graph graph, String name) {
+        // This method is executed when a destination node is not found in the simple model.
+        // The resolveableModel is the complete megamodel instance and an import node is to be created
+        // If there is still no node available, throw an exception
         if (!resolveableModel.getInstanceOfMap().containsKey(name)) {
             throw new MegaModelVisualizerException("Could not resolve node " + name);
         }
         String type = resolveableModel.getInstanceOfMap().get(name);
         Node result = createNode(name, type, resolveableModel);
         graph.add(result);
-        
+
         return result;
     }
 

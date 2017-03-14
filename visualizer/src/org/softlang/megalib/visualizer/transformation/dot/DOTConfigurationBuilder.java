@@ -26,6 +26,8 @@ public class DOTConfigurationBuilder implements ConfigurationBuilder {
     }
 
     private Optional<Properties> loadFromFile() {
+        // Check if a graphviz.properties file exists
+        // Otherwise load the default properties resources provided by this project's resources
         Path filePath = Paths.get("graphviz.properties");
         if (!filePath.toFile().exists()) {
             return Optional.empty();

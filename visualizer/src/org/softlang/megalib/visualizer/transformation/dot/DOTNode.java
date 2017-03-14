@@ -6,7 +6,8 @@ package org.softlang.megalib.visualizer.transformation.dot;
 import org.softlang.megalib.visualizer.models.Node;
 
 /**
- *
+ * Create instances of DOTNode to enrich a simple Node using style sheet information
+ * 
  * @author Dmitri Nikonov <dnikonov at uni-koblenz.de>
  */
 public class DOTNode extends Node {
