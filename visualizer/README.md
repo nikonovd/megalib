@@ -9,7 +9,7 @@ The megalib visualizer is designed and implemented to be extendible using a flex
 ## Installation
 Before installing the visualizer library, please ensure that your target machine provides a Java Runtime Environment with minimal version 8. Check your installed Java version and update if necessary. You can download the latest JRE 8 [here](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
 
-This repository provides a runnable binary in form of a jar file. To download the latest release of the visualizer, check the [releases](https://github.com/nikonovd/megalib/releases). It is also possible to compile the project source code yourself. For further instructions, refer to [Custom build](#contribution)
+This repository provides a runnable binary in form of a jar file. To download the latest release of the visualizer, check the [release](https://github.com/nikonovd/megalib/blob/master/visualizer/visualizer.jar). It is also possible to compile the project source code yourself. For further instructions, refer to [Custom build](#contribution)
 
 Anyway, the jar file, regardless of the origin, must obtain the following file hierarchy:
 ```
