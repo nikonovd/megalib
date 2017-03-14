@@ -35,5 +35,21 @@ This command takes the MySQL.megal model intoc accounting and visualized it usin
 
 **Note:** Although yed is a valid type parameter, the yed visualizer is not implemented yet. Executing the visualizer with this type will result in an error.
 
-## Contribution
+## Configuration
+Concrete visualizer adapters may use additional configuration options provided outside of the execution scope. For concrete information on configuring a concrete visualizer adapter, visit the [wiki](https://github.com/nikonovd/megalib/wiki)
 
+## Contribution
+Contribution to this project requires several steps to be done. 
+
+1. Clone this git repository using ```git clone```
+1. Ensure that the checker dependency is provided on any maven repository, even if it has to be the local repository.
+   The current visualizer implementation relies on the following checker dependency structure:
+   ```xml
+   <dependency>
+      <groupId>org.softlang.megalib</groupId>
+      <artifactId>checker</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+   </dependency>
+   ```
+   Otherwise build of this project will fail.
+1. Apply extensions and changes to the code. For advances extension techniques, visit the [wiki](https://github.com/nikonovd/megalib/wiki)
